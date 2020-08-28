@@ -1,0 +1,11 @@
+{
+  "name": "nkmalecnik-rewrite",
+  "version": "1.0.0",
+  "description": "NK Malecnik rewrite",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
