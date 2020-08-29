@@ -6,7 +6,8 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon --exec babel-node index.js"
+    "dev": "nodemon --exec babel-node index.js",
+    "sass:compile": "node-sass --watch --include-path public/scss public/scss/index.scss --output  public/styles/"
   },
   "author": "",
   "license": "ISC",
@@ -22,6 +23,7 @@
     "@babel/preset-env": "^7.11.0",
     "eslint": "^7.7.0",
     "eslint-config-airbnb-base": "^14.2.0",
-    "eslint-plugin-import": "^2.22.0"
+    "eslint-plugin-import": "^2.22.0",
+    "node-sass": "^4.14.1"
   }
 }
