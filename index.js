@@ -10,6 +10,7 @@ import session from 'express-session';
 // Routers definition
 import indexRouter from './routes/index';
 import userRouter from './routes/userRouter';
+import dashboardRouter from './routes/dashboardRouter';
 
 const app = express();
 const port = 3000;
@@ -45,6 +46,7 @@ app.use((req, res, next) => {
 // Using routers
 app.use('/', indexRouter);
 app.use('/users', userRouter);
+app.use('/dashboard', dashboardRouter);
 
 app.listen(port, () => {
   console.log(`Started a server at http://localhost:${port}`);
