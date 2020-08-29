@@ -1,6 +1,12 @@
 html
     head
         link(rel='stylesheet', href='styles/index.css')
-        title= title
+        title NK Malecnik
     body
-        h1= message
+        h1 Prijava
+        form(action='/login', method='post')
+            input(type='text', id='email', name='email')
+            br
+            input(type='text', id='password', name='password')
+            br
+            button(type='submit') Prijava
