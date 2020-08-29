@@ -4,9 +4,9 @@ html
         title NK Malecnik
     body
         h1 Prijava
-        form(action='/login', method='post')
+        form(action='/users/login', method='post')
             input(type='text', id='email', name='email')
             br
-            input(type='text', id='password', name='password')
+            input(type='password', id='password', name='password')
             br
             button(type='submit') Prijava

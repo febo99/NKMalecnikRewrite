@@ -5,6 +5,7 @@ import morgan from 'morgan';
 import path from 'path';
 import fs from 'fs';
 import bodyParser from 'body-parser';
+import session from 'express-session';
 
 // Routers definition
 import indexRouter from './routes/index';
@@ -27,6 +28,8 @@ app.use(morgan('combined', { stream: logger }));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
+app.use(session({ secret: process.env.SESSION_SECRET }));
+
 // Database connection
 app.use((req, res, next) => {
   res.locals.connection = mysql.createConnection({
@@ -41,7 +44,7 @@ app.use((req, res, next) => {
 
 // Using routers
 app.use('/', indexRouter);
-app.use('/login', userRouter);
+app.use('/users', userRouter);
 
 app.listen(port, () => {
   console.log(`Started a server at http://localhost:${port}`);
