@@ -7,7 +7,7 @@ import fs from 'fs';
 import bodyParser from 'body-parser';
 import session from 'express-session';
 
-// Routers definition
+// Routers imports
 import indexRouter from './routes/index';
 import userRouter from './routes/userRouter';
 import dashboardRouter from './routes/dashboardRouter';
