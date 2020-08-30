@@ -1,0 +1,16 @@
+html
+    head
+        link(rel='stylesheet', href='styles/index.css')
+        title NK Malecnik
+    body
+        h1 Users
+        form(action='/users/addUser', method='post')
+            input(type='text' name='email' id='email' value='test') 
+            input(type='text' name='name' id='name' value='test')
+            input(type='text' name='surname' id='surname' value='test')
+            input(type='password' name='password' id='password' value='test')
+            input(type='text' name='phone' id='phone' value='test')
+            select(name='role' id='role')
+                each role in roles
+                    option(value= role.ID)= role.name
+            input(type='submit' value='Dodaj') 
