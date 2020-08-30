@@ -11,6 +11,7 @@ import session from 'express-session';
 import indexRouter from './routes/index';
 import userRouter from './routes/userRouter';
 import dashboardRouter from './routes/dashboardRouter';
+import playersRouter from './routes/playersRouter';
 
 const app = express();
 const port = 3000;
@@ -47,6 +48,7 @@ app.use((req, res, next) => {
 app.use('/', indexRouter);
 app.use('/users', userRouter);
 app.use('/dashboard', dashboardRouter);
+app.use('/players', playersRouter);
 
 app.listen(port, () => {
   console.log(`Started a server at http://localhost:${port}`);

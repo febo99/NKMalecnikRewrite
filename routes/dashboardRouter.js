@@ -1,13 +1,8 @@
-const express = require('express');
+import express from 'express';
+import dashboardController from '../controllers/dashboardController';
 
 const router = express.Router();
 
-router.get('/', (req, res) => {
-  if (req.session.email) {
-    res.render('dashboard', { user: { email: req.session.email, role: req.session.role, id: req.session.userID } });
-  } else {
-    res.render('index');
-  }
-});
+router.get('/', dashboardController.getDashboard);
 
 module.exports = router;

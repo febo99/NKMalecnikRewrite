@@ -17,6 +17,19 @@ module.exports = {
       return res.redirect('/dashboard');
     });
   },
+
+  logout: (req, res) => {
+    if (req.session.email) {
+      req.session.destroy();
+      return res.render('logout', { data: 'Uspesno odjavljen!' });
+    }
+    return res.render('logout', { data: 'Nisi prijavljen!' });
+  },
+
+  addUser: (req, res) => {
+    console.log('adding user');
+  },
+
   getAllUsers: (req, res) => {
     res.locals.connection.query('SELECT * FROM users', (err, rows) => {
       if (err) {
@@ -27,11 +40,14 @@ module.exports = {
     });
   },
 
-  logout: (req, res) => {
-    if (req.session.email) {
-      req.session.destroy();
-      return res.json({ message: 'Uspesno!' });
-    }
-    return res.json({ error: 'Nisi prijavljen' });
+  getUser: (req, res) => {
+    const userID = req.params.id;
+    res.locals.connection.query('SELECT * FROM users WHERE ID = ?', [userID], (err, rows) => {
+      if (err) {
+        res.json({ error: err });
+        throw err;
+      }
+      return res.json({ data: rows[0] });
+    });
   },
 };
