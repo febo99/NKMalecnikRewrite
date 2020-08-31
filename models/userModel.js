@@ -12,6 +12,14 @@ module.exports = class User {
   parseInsert() {
     return [this.id, this.email, this.name, this.surname, this.password, this.phone, this.role];
   }
+
+  validateUser() {
+    const error = [];
+    if (!(this.email.includes('@'))) error.push('Neveljaven e-postni naslov!');
+    if (this.password.length <= 5) error.push('Geslo mora biti dolgo vsaj 5 znakov!');
+    if (error.length === 0) return false;
+    return error;
+  }
 };
 
 export default { };

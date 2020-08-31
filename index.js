@@ -30,7 +30,7 @@ app.use(morgan('combined', { stream: logger }));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-app.use(session({ secret: process.env.SESSION_SECRET }));
+app.use(session({ secret: process.env.SESSION_SECRET, resave: false, saveUninitialized: false }));
 
 // Database connection
 app.use((req, res, next) => {

@@ -14,3 +14,6 @@ html
                 each role in roles
                     option(value= role.ID)= role.name
             input(type='submit' value='Dodaj') 
+        if error
+            each e in error
+                h4= e

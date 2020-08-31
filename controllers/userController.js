@@ -9,10 +9,11 @@ module.exports = {
         throw err;
       }
       if (rows.length === 0) {
-        return res.json({ error: 'Uporabnik ne obstaja!' });
+        req.session.error = 'Uporabnik ne obstaja!';
+        return res.redirect('/');
       }
       const { password } = rows[0];
-      bcrypt.compare(req.body.password, password, (compareErr, result) => {
+      return bcrypt.compare(req.body.password, password, (compareErr, result) => {
         if (result) {
           const { email } = rows[0];
           const { role } = rows[0];
@@ -22,7 +23,8 @@ module.exports = {
           req.session.userID = userID;
           return res.redirect('/dashboard');
         }
-        return res.render('index', { err: 'Geslo se ne ujema!' });
+        req.session.error = 'Vneseno geslo ni pravilno!';
+        return res.redirect('/');
       });
     });
   },
@@ -37,18 +39,26 @@ module.exports = {
 
   addUser: (req, res) => {
     if (!req.session.email) return res.json({ err: 'You are not logged in!' });
+
     const saltRounds = 10;
     const newUser = new User(String(req.body.email), String(req.body.name),
       String(req.body.surname), String(req.body.password),
       String(req.body.phone), req.body.role);
 
-    res.locals.connection.query('SELECT * FROM users WHERE email = ?', [newUser.email], (err, rows) => {
+    const newUserError = newUser.validateUser();
+
+    if (newUserError) {
+      req.session.error = newUserError;
+      return res.redirect('/users');
+    }
+
+    return res.locals.connection.query('SELECT * FROM users WHERE email = ?', [newUser.email], (err, rows) => {
       if (err) {
         return res.json({ err });
       }
       if (rows.length > 0) return res.json({ err: 'Email je ze v uporabi!' });
 
-      bcrypt.hash(newUser.password, saltRounds, (hashErr, hash) => {
+      return bcrypt.hash(newUser.password, saltRounds, (hashErr, hash) => {
         newUser.password = hash;
         res.locals.connection.query('INSERT INTO users VALUES ?', [[newUser.parseInsert()]], (err1, result) => {
           if (err1) return res.json({ err: err1 });
@@ -65,14 +75,16 @@ module.exports = {
         res.json({ error: err });
         throw err;
       }
-      return res.locals.connection.query('SELECT * FROM roles', async (err, roles) => res.render('./users/users', { data: rows, roles }));
+      const { error } = req.session;
+      req.session.error = null;
+      await res.locals.connection.query('SELECT * FROM roles', async (err1, roles) => res.render('./users/users', { data: rows, roles, error }));
     });
   },
 
   getUser: (req, res) => {
     if (!req.session.email) return res.redirect('/');
     const userID = req.params.id;
-    return res.locals.connection.query('SELECT * FROM users WHERE ID = ?', [userID], (err, rows) => {
+    return res.locals.connection.query('SELECT *, roles.ID as roleID FROM users  INNER JOIN roles ON users.role = roles.ID WHERE users.ID = ?', [userID], (err, rows) => {
       if (err) {
         res.json({ error: err });
         throw err;
