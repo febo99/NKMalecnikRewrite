@@ -19,6 +19,7 @@ import payrollRouter from './routes/payrollRouter';
 import presenceRouter from './routes/presenceRouter';
 import trainingsRouter from './routes/trainingsRouter';
 import calendarRouter from './routes/calendarRouter';
+import scoutingRouter from './routes/scoutingRouter';
 
 const app = express();
 const port = 3000;
@@ -63,6 +64,7 @@ app.use('/presence-report', presenceRouter);
 app.use('/payroll', payrollRouter);
 app.use('/trainings', trainingsRouter);
 app.use('/calendar', calendarRouter);
+app.use('/scouting', scoutingRouter);
 
 app.listen(port, () => {
   console.log(`Started a server at http://localhost:${port}`);
