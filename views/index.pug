@@ -4,6 +4,7 @@ html
         title NK Malecnik
         meta(charset='utf-8')
         meta(name='viewport', content='width=device-width, maximum-scale=1.0, user-scalable=no')
+        link(rel='stylesheet', href='https://unpkg.com/bootstrap-table@1.17.1/dist/bootstrap-table.min.css')
     body
         h1 Prijava
         form(action='/users/login', method='post')
@@ -14,3 +15,4 @@ html
             button(type='submit') Prijava
         if err
             h4= err
+        script(src='https://unpkg.com/bootstrap-table@1.17.1/dist/bootstrap-table.min.js')
