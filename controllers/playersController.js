@@ -1,12 +1,14 @@
 module.exports = {
   getAllPlayers: (req, res) => {
-    res.locals.connection.query('SELECT * FROM players', (err, rows) => {
-      if (err) {
-        res.json({ error: err });
-        throw err;
-      }
-      return res.json({ data: rows });
-    });
+    if (req.session.email) {
+      res.locals.connection.query('SELECT * FROM players', (err, rows) => {
+        if (err) {
+          res.json({ error: err });
+          throw err;
+        }
+        return res.render('players/players', { players: rows });
+      });
+    }
   },
 
   getMyPlayers: (req, res) => {
@@ -17,7 +19,7 @@ module.exports = {
           res.json({ error: err });
           throw err;
         }
-        return res.json({ data: rows });
+        return res.render('players/myPlayers', { players: rows });
       });
     } else {
       res.redirect('/');
