@@ -5,9 +5,9 @@ html
     body
         h1 Prijava
         form(action='/users/login', method='post')
-            input(type='text', id='email', name='email')
+            input(type='text', id='email', name='email', value='admin')
             br
-            input(type='password', id='password', name='password')
+            input(type='password', id='password', name='password', value='admin')
             br
             button(type='submit') Prijava
         if err

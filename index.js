@@ -12,6 +12,13 @@ import indexRouter from './routes/index';
 import userRouter from './routes/userRouter';
 import dashboardRouter from './routes/dashboardRouter';
 import playersRouter from './routes/playersRouter';
+import teamsRouter from './routes/teamsRouter';
+import settingsRouter from './routes/settingsRouter';
+import matchesRouter from './routes/matchesRouter';
+import payrollRouter from './routes/payrollRouter';
+import presenceRouter from './routes/presenceRouter';
+import trainingsRouter from './routes/trainingsRouter';
+import calendarRouter from './routes/calendarRouter';
 
 const app = express();
 const port = 3000;
@@ -49,6 +56,13 @@ app.use('/', indexRouter);
 app.use('/users', userRouter);
 app.use('/dashboard', dashboardRouter);
 app.use('/players', playersRouter);
+app.use('/teams', teamsRouter);
+app.use('/settings', settingsRouter);
+app.use('/matches', matchesRouter);
+app.use('/presence-report', presenceRouter);
+app.use('/payroll', payrollRouter);
+app.use('/trainings', trainingsRouter);
+app.use('/calendar', calendarRouter);
 
 app.listen(port, () => {
   console.log(`Started a server at http://localhost:${port}`);
