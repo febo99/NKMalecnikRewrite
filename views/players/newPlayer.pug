@@ -1,0 +1,31 @@
+html
+    head
+        include ../templates/header
+        title NK Malecnik
+    body
+        h1 Users
+        form(action='/players/addPlayer', method='post')
+            input(type='text' name='name' id='name' value='test')
+            input(type='text' name='surname' id='surname' value='test')
+            input(type='date' name='dateOfBirth' id='dateOfBirth')
+            input(type='text' name='address' id='address')
+            input(type='number' name='postNumber' id='postNumber')
+            input(type='text' name='postName' id='postName')
+            input(type='text' name='playerEmail' id='playerEmail')
+            input(type='number' name='emso' id='emso')
+            input(type='number' name='registerNumber' id='registerNumber')
+            select(name='team' id='team')
+                each team in teams
+                    option(value= team.ID)= team.name
+            input(type='submit' value='Dodaj') 
+            input(type='text' name='dadName' id='parentInfo')
+            input(type='text' name='dadPhone' id='parentInfo')
+            input(type='text' name='dadEmail' id='parentInfo')
+            input(type='text' name='mumName' id='parentInfo')
+            input(type='text' name='mumPhone' id='parentInfo')
+            input(type='text' name='mumEmail' id='parentInfo')
+            input(type='text' name='phone' id='phone' value='test')
+            input(type='submit' value='Dodaj') 
+        if error
+            each e in error
+                h4= e
