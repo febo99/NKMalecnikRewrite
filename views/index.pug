@@ -8,11 +8,15 @@ html
     body
         h1 Prijava
         form(action='/users/login', method='post')
-            input(type='text', id='email', name='email', value='admin')
+            div(class='input-group mb-3')
+                div(class='input-group-prepend')         
+                input(type='text', class='form-control', id='email', name='email', value='admin', placeholder='E-mail', aria-label='E-mail', aria-describedby='basic-addon1')
             br
-            input(type='password', id='password', name='password', value='admin')
+            div(class='input-group mb-3')
+                div(class='input-group-prepend')
+                input(type='password', class='form-control', id='password', name='password', value='admin', placeholder='Geslo', aria-label='Geslo', aria-describedby='basic-addon1')
             br
-            button(type='submit') Prijava
+            button(class='btn btn-primary', type='submit') Prijava
         if err
             h4= err
         script(src='https://unpkg.com/bootstrap-table@1.17.1/dist/bootstrap-table.min.js')
