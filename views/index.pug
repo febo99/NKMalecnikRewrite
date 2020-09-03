@@ -1,22 +1,29 @@
 html
     head
-        include templates/header
         title NK Malecnik
         meta(charset='utf-8')
         meta(name='viewport', content='width=device-width, maximum-scale=1.0, user-scalable=no')
+        link(rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous")
         link(rel='stylesheet', href='https://unpkg.com/bootstrap-table@1.17.1/dist/bootstrap-table.min.css')
+        include templates/header
     body
-        h1 Prijava
-        form(action='/users/login', method='post')
-            div(class='input-group mb-3')
-                div(class='input-group-prepend')         
-                input(type='text', class='form-control', id='email', name='email', value='admin', placeholder='E-mail', aria-label='E-mail', aria-describedby='basic-addon1')
-            br
-            div(class='input-group mb-3')
-                div(class='input-group-prepend')
-                input(type='password', class='form-control', id='password', name='password', value='admin', placeholder='Geslo', aria-label='Geslo', aria-describedby='basic-addon1')
-            br
-            button(class='btn btn-primary', type='submit') Prijava
+        .container
+            .center-login
+                .media
+                    .media-body
+                        img(src='../images/logo.png', class='mr-1', alt='Logotip NK Malečnik', height='60px', width='60px')
+                    h1(class='mt-1 mb-1 ml-1') NK Malečnik
+                br
+                form(action='/users/login', method='post')
+                    div(class='input-group mb-3')
+                        div(class='input-group-prepend')         
+                        input(type='text', class='form-control', id='email', name='email', value='admin', placeholder='E-mail', aria-label='E-mail', aria-describedby='basic-addon1')
+                    br
+                    div(class='input-group mb-3')
+                        div(class='input-group-prepend')
+                        input(type='password', class='form-control', id='password', name='password', value='admin', placeholder='Geslo', aria-label='Geslo', aria-describedby='basic-addon1')
+                    br
+                    button(class='btn btn-primary', type='submit') Prijava
         if err
             h4= err
         script(src='https://unpkg.com/bootstrap-table@1.17.1/dist/bootstrap-table.min.js')

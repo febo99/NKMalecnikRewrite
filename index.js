@@ -22,7 +22,7 @@ import calendarRouter from './routes/calendarRouter';
 import scoutingRouter from './routes/scoutingRouter';
 
 const app = express();
-const port = 3000;
+const port = 3001;
 
 const logger = fs.createWriteStream(path.join(__dirname, 'logs/access.log'), { flags: 'a' });
 
