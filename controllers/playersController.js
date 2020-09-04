@@ -95,4 +95,12 @@ module.exports = {
       });
     }
   },
+
+  editPlayerForm: (req, res) => {
+
+  },
+
+  editPlayer: (req, res) => {
+
+  },
 };

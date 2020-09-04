@@ -1,0 +1,33 @@
+html
+    head
+        include ../templates/header
+        title NK Malecnik
+    body
+        h1 Users
+        form(action='/players/addPlayer', method='post')
+            input(type='text' name='name' id='name' value='test')
+            input(type='text' name='surname' id='surname' value='test')
+            input(type='date' name='dateOfBirth' id='dateOfBirth')
+            input(type='checkbox' name='nationality' id='nationality')
+            input(type='text' name='address' id='address' value='test 39')
+            input(type='number' name='postNumber' id='postNumber' value=2229)
+            input(type='text' name='postName' id='postName' value='malecnik')
+            input(type='text' name='playerPhone' id='playerPhone' value='123123123')
+            input(type='text' name='playerEmail' id='playerEmail' value='test@')
+            input(type='text' name='note' id='note' value='testddd')
+            input(type='number' name='emso' id='emso' value='1231231231233')
+            input(type='number' name='registerNumber' id='registerNumber' value='123123')
+            select(name='team' id='team')
+                each team in teams
+                    option(value= team.ID)= team.name
+            input(type='text' name='dadName' id='parentInfo' value='ata')
+            input(type='text' name='dadPhone' id='parentInfo' value='123123123')
+            input(type='text' name='dadEmail' id='parentInfo' value='ata@')
+            input(type='text' name='mumName' id='parentInfo' value='mama')
+            input(type='text' name='mumPhone' id='parentInfo' value='123123123')
+            input(type='text' name='mumEmail' id='parentInfo' value='mama@')
+            input(type='text' name='phone' id='phone' value='test')
+            input(type='submit' value='Dodaj') 
+        if error
+            each e in error
+                h4= e
