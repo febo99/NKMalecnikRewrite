@@ -59,14 +59,16 @@ module.exports = {
   addUser: (req, res) => {
     const error = {};
     const phoneNumberRegex = /^[\d ()+-]+$/;
-    // check if all not-null values are filled
+
     const newPlayer = new Player(req.body.name, req.body.surname, req.body.dateOfBirth,
       req.body.nationality === 'on' ? 0 : 1, req.body.address, req.body.postNumber,
       req.body.postName, req.body.playerPhone, req.body.playerEmail, req.body.dadName,
       req.body.dadPhone, req.body.dadEmail,
       req.body.mumName, req.body.mumPhone, req.body.mumEmail,
-      req.body.emso, req.body.registerNumber, req.body.note, req.body.teamID, req.session.userID);
-    console.log(newPlayer);
+      req.body.emso, req.body.registerNumber, req.body.note, req.body.team, req.session.userID);
+
+    // check if all not-null values are filled
+
     if (newPlayer.name === null || newPlayer.name === '') error.name = 'Obvezno polje - ime';
     if (newPlayer.surname === null || newPlayer.surname === '') error.surname = 'Obvezno polje - priimek';
     if (newPlayer.address === null || newPlayer.address === '') error.address = 'Obvezno polje - naslov';
@@ -75,7 +77,6 @@ module.exports = {
     if (newPlayer.team === null || newPlayer.team === '') error.team = 'Obvezno polje - ekipa';
 
     // values validation TO-DO
-    console.log(phoneNumberRegex.test(newPlayer.playerPhone));
     if (!phoneNumberRegex.test(newPlayer.playerPhone) || newPlayer.playerPhone === '') error.playerPhone = 'Neveljavna telefonska stevilka igralca!';
     if (!phoneNumberRegex.test(newPlayer.dadPhone) || newPlayer.dadPhone === '') error.dadPhone = 'Neveljavna telefonska stevilka oceta!';
     if (!phoneNumberRegex.test(newPlayer.mumPhone) || newPlayer.mumPhone === '') error.mumPhone = 'Neveljavna telefonska stevilka mame!';
@@ -83,12 +84,12 @@ module.exports = {
     if (newPlayer.postNumber.length !== 4) error.postNumber = 'Neveljavna postna stevilka!';
     // nationality = 1 => slovenia, others = 0
 
-    if (error.length !== 0) {
+    if (Object.keys(error).length !== 0) {
       req.session.error = error;
       req.session.oldValues = req.body;
       res.redirect('/players/new-player');
-    } else if (error.length === 0) {
-      res.locals.connection.query('INSERT INTO players VALUES ?', [newPlayer.parseInsert()], (err, result) => {
+    } else if (Object.keys(error).length === 0) {
+      res.locals.connection.query('INSERT INTO players VALUES ?', [[newPlayer.parseInsert()]], (err, result) => {
         if (err) return res.json({ err });
         return res.json({ result });
       });

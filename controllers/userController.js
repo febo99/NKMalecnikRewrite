@@ -17,10 +17,10 @@ module.exports = {
         if (result) {
           const { email } = rows[0];
           const { role } = rows[0];
-          const { userID } = rows[0].ID;
+          const { ID } = rows[0];
           req.session.email = email;
           req.session.role = role;
-          req.session.userID = userID;
+          req.session.userID = ID;
           return res.redirect('/dashboard');
         }
         req.session.error = 'Vneseno geslo ni pravilno!';
