@@ -3,6 +3,7 @@ html
         include ../templates/header
         title NK Malecnik
     body
-        h1 Nastavitve
-        a(href='/settings/locations') Lokacije
+        h1 Lokacije
+        each location in locations
+            p= location.name
         a(href='/settings/new-location') Nova lokacija

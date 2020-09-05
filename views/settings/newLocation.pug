@@ -1,0 +1,13 @@
+html
+    head
+        include ../templates/header
+        title NK Malecnik
+    body
+        h1 Users
+        form(action='/settings/addLocation', method='post')
+            input(type='text' name='name' id='name' value='test') 
+            input(type='text' name='color' id='color' value='test')
+            input(type='submit' value='Dodaj')
+        if error
+            each e in error
+                h4= e
