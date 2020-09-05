@@ -1,8 +1,9 @@
 import Player from '../models/playerModel';
+import { userLogged } from '../utils/checkLogin';
 
 module.exports = {
   getAllPlayers: (req, res) => {
-    if (req.session.email) {
+    if (userLogged(req)) {
       res.locals.connection.query('SELECT * FROM players', (err, rows) => {
         if (err) {
           res.json({ error: err });
@@ -19,7 +20,7 @@ module.exports = {
   },
 
   getMyPlayers: (req, res) => {
-    if (req.session.email) {
+    if (userLogged(req)) {
       const { userID } = req.session;
       res.locals.connection.query('SELECT * FROM players WHERE created = ?', [userID], (err, rows) => {
         if (err) {
@@ -39,7 +40,7 @@ module.exports = {
   },
 
   newPlayerForm: (req, res) => {
-    if (req.session.email) {
+    if (userLogged(req)) {
       res.locals.connection.query('SELECT * FROM teams ', (err, rows) => {
         if (err) {
           res.json({ error: err });
@@ -57,50 +58,59 @@ module.exports = {
   },
 
   addUser: (req, res) => {
-    const error = {};
-    const phoneNumberRegex = /^[\d ()+-]+$/;
+    if (userLogged(req)) {
+      const error = {};
+      const phoneNumberRegex = /^[\d ()+-]+$/;
 
-    const newPlayer = new Player(req.body.name, req.body.surname, req.body.dateOfBirth,
-      req.body.nationality === 'on' ? 0 : 1, req.body.address, req.body.postNumber,
-      req.body.postName, req.body.playerPhone, req.body.playerEmail, req.body.dadName,
-      req.body.dadPhone, req.body.dadEmail,
-      req.body.mumName, req.body.mumPhone, req.body.mumEmail,
-      req.body.emso, req.body.registerNumber, req.body.note, req.body.team, req.session.userID);
+      const newPlayer = new Player(req.body.name, req.body.surname, req.body.dateOfBirth,
+        req.body.nationality === 'on' ? 0 : 1, req.body.address, req.body.postNumber,
+        req.body.postName, req.body.playerPhone, req.body.playerEmail, req.body.dadName,
+        req.body.dadPhone, req.body.dadEmail,
+        req.body.mumName, req.body.mumPhone, req.body.mumEmail,
+        req.body.emso, req.body.registerNumber, req.body.note, req.body.team, req.session.userID);
 
-    // check if all not-null values are filled
+      // check if all not-null values are filled
 
-    if (newPlayer.name === null || newPlayer.name === '') error.name = 'Obvezno polje - ime';
-    if (newPlayer.surname === null || newPlayer.surname === '') error.surname = 'Obvezno polje - priimek';
-    if (newPlayer.address === null || newPlayer.address === '') error.address = 'Obvezno polje - naslov';
-    if (newPlayer.postNumber === null || newPlayer.postNumber === '') error.postNumber = 'Obvezno polje - postna stevilka';
-    if (newPlayer.postName === null || newPlayer.postName === '') error.postName = 'Obvezno polje - posta';
-    if (newPlayer.team === null || newPlayer.team === '') error.team = 'Obvezno polje - ekipa';
+      if (newPlayer.name === null || newPlayer.name === '') error.name = 'Obvezno polje - ime';
+      if (newPlayer.surname === null || newPlayer.surname === '') error.surname = 'Obvezno polje - priimek';
+      if (newPlayer.address === null || newPlayer.address === '') error.address = 'Obvezno polje - naslov';
+      if (newPlayer.postNumber === null || newPlayer.postNumber === '') error.postNumber = 'Obvezno polje - postna stevilka';
+      if (newPlayer.postName === null || newPlayer.postName === '') error.postName = 'Obvezno polje - posta';
+      if (newPlayer.team === null || newPlayer.team === '') error.team = 'Obvezno polje - ekipa';
 
-    // values validation TO-DO
-    if (!phoneNumberRegex.test(newPlayer.playerPhone) || newPlayer.playerPhone === '') error.playerPhone = 'Neveljavna telefonska stevilka igralca!';
-    if (!phoneNumberRegex.test(newPlayer.dadPhone) || newPlayer.dadPhone === '') error.dadPhone = 'Neveljavna telefonska stevilka oceta!';
-    if (!phoneNumberRegex.test(newPlayer.mumPhone) || newPlayer.mumPhone === '') error.mumPhone = 'Neveljavna telefonska stevilka mame!';
-    if (newPlayer.emso.length !== 13) error.emso = 'Neveljaven emso!';
-    if (newPlayer.postNumber.length !== 4) error.postNumber = 'Neveljavna postna stevilka!';
-    // nationality = 1 => slovenia, others = 0
+      // values validation TO-DO
+      if (!phoneNumberRegex.test(newPlayer.playerPhone) || newPlayer.playerPhone === '') error.playerPhone = 'Neveljavna telefonska stevilka igralca!';
+      if (!phoneNumberRegex.test(newPlayer.dadPhone) || newPlayer.dadPhone === '') error.dadPhone = 'Neveljavna telefonska stevilka oceta!';
+      if (!phoneNumberRegex.test(newPlayer.mumPhone) || newPlayer.mumPhone === '') error.mumPhone = 'Neveljavna telefonska stevilka mame!';
+      if (newPlayer.emso.length !== 13) error.emso = 'Neveljaven emso!';
+      if (newPlayer.postNumber.length !== 4) error.postNumber = 'Neveljavna postna stevilka!';
+      // nationality = 1 => slovenia, others = 0
 
-    if (Object.keys(error).length !== 0) {
-      req.session.error = error;
-      req.session.oldValues = req.body;
-      res.redirect('/players/new-player');
-    } else if (Object.keys(error).length === 0) {
-      res.locals.connection.query('INSERT INTO players VALUES ?', [[newPlayer.parseInsert()]], (err, result) => {
-        if (err) return res.json({ err });
-        return res.json({ result });
-      });
+      if (Object.keys(error).length !== 0) {
+        req.session.error = error;
+        req.session.oldValues = req.body;
+        res.redirect('/players/new-player');
+      } else if (Object.keys(error).length === 0) {
+        res.locals.connection.query('INSERT INTO players VALUES ?', [[newPlayer.parseInsert()]], (err, result) => {
+          if (err) return res.json({ err });
+          return res.json({ result });
+        });
+      }
     }
   },
 
   editPlayerForm: (req, res) => {
-
+    if (userLogged(req)) {
+      res.render('/players/editPlayer');
+    } else {
+      res.redirect('/');
+    }
   },
 
   editPlayer: (req, res) => {
-
+    if (userLogged(req)) {
+      return res.json({ test: 'test' });
+    }
+    return res.redirect('/');
   },
 };

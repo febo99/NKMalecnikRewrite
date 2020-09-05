@@ -9,6 +9,6 @@ router.get('/new-player', playersController.newPlayerForm);
 router.get('/edit-player/:id', playersController.editPlayerForm);
 
 router.post('/addPlayer', playersController.addUser);
-router.post('/editPlayer', playersController.editUser);
+router.post('/editPlayer', playersController.editPlayer);
 
 module.exports = router;
