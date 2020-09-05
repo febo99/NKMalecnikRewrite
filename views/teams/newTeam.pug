@@ -1,0 +1,22 @@
+html
+    head
+        include ../templates/header
+        title NK Malecnik
+    body
+        h1 Users
+        form(action='/teams/addTeam', method='post')
+            input(type='text' name='name' id='name' value='test') 
+            input(type='text' name='note' id='note' value='test')
+            select(name='coach' id='coach')
+                each user in users
+                    option(value= user.ID)= user.name
+            select(name='assistant' id='assistant')
+                each user in users
+                    option(value= user.ID)= user.name
+            select(name='technical' id='technical')
+                each user in users
+                    option(value= user.ID)= user.name
+            input(type='submit' value='Dodaj') 
+        if error
+            each e in error
+                h4= e

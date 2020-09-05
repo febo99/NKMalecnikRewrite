@@ -4,3 +4,6 @@ html
         title NK Malecnik
     body
         h1 Ekipe
+        each team in teams
+            p= team.team + ' ' + team.username
+        a(href='/teams/add-team') Dodaj ekipo
