@@ -2,8 +2,30 @@ html
     head
         include templates/header
         title NK Malecnik
+        link(rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous")
+        link(rel='stylesheet', href='https://unpkg.com/bootstrap-table@1.17.1/dist/bootstrap-table.min.css')
     body
-        h1 Dashboard simple
+        nav(class="navbar navbar-dark bg-primary")
+            a(class="navbar-brand", href="#")
+                img(src="../images/logo-white.png", width="40", height="40", class="d-inline-block align-top ml-0", alt="", loading="lazy") 
+                p(style="display: inline; font-size:1.2em;", class="ml-2") NK Malečnik 
+            //-script
+           //-var welcome
+            var date = new Date()
+            var hout = date.getHours()
+            var minute = date.getMinutes()
+            var second = date.getSeconds()
+            if (minute < 10)
+                minute = "0" + minute
+            if (second < 10)
+                second = "0" + second
+            if (hour < 12)
+                welcome = "Dobro jutro"
+            else if (hour < 17)
+                welcome = "Dober dan"
+            else
+                welcome = "Dober večer"
+            document.write = "h2=" + welcome + ", " + user.email + " " + user.role;
         h2=user.email + ' ' + user.role
         a(href='/users/logout') Odjava
         a(href='/players/my-players') Moji igralci
