@@ -49,7 +49,7 @@ module.exports = {
 
     if (newUserError) {
       req.session.error = newUserError;
-      return res.redirect('/users');
+      return res.redirect('/users/add-user');
     }
 
     return res.locals.connection.query('SELECT * FROM users WHERE email = ?', [newUser.email], (err, rows) => {
@@ -60,6 +60,7 @@ module.exports = {
 
       return bcrypt.hash(newUser.password, saltRounds, (hashErr, hash) => {
         newUser.password = hash;
+
         res.locals.connection.query('INSERT INTO users VALUES ?', [[newUser.parseInsert()]], (err1, result) => {
           if (err1) return res.json({ err: err1 });
           return res.json({ result });
@@ -90,6 +91,15 @@ module.exports = {
         throw err;
       }
       return res.json({ data: rows[0] });
+    });
+  },
+
+  addUserForm: async (req, res) => {
+    if (!req.session.email) return res.redirect('/');
+    return res.locals.connection.query('SELECT * FROM teams', async (err, teams) => {
+      const { error } = req.session;
+      req.session.error = null;
+      await res.locals.connection.query('SELECT * FROM roles', async (err2, roles) => res.render('./users/newUserForm', { roles, teams, error }));
     });
   },
 };

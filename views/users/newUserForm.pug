@@ -5,14 +5,17 @@ html
     body
         h1 Users
         form(action='/users/addUser', method='post')
-            input(type='text' name='email' id='email' value='test') 
-            input(type='text' name='name' id='name' value='test')
-            input(type='text' name='surname' id='surname' value='test')
-            input(type='password' name='password' id='password' value='test')
-            input(type='text' name='phone' id='phone' value='test')
+            input(type='text' name='email' id='email' value='test@test.com') 
+            input(type='text' name='name' id='name' value='Marko')
+            input(type='text' name='surname' id='surname' value='Test')
+            input(type='password' name='password' id='password' value='123456789')
+            input(type='text' name='phone' id='phone' value='112112112')
             select(name='team' id='team')
                 each team in teams
                     option(value= team.ID)= team.name
+            select(name='role' id='role')
+                each role in roles
+                    option(value= role.ID)= role.role
             input(type='submit' value='Dodaj') 
         if error
             each e in error
