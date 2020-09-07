@@ -1,0 +1,13 @@
+html
+    head
+        include ../templates/header
+        title NK Malecnik
+    body
+        h1= location.name
+        form(action='/settings/editLocation/'+location.ID, method='post')
+            input(type='text' name='name' id='name' value= location.name) 
+            input(type='text' name='color' id='color' value= location.color)
+            input(type='submit' value='Shrani')
+        if error
+            each e in error
+                h4= e

@@ -5,5 +5,5 @@ html
     body
         h1 Lokacije
         each location in locations
-            p= location.name
-        a(href='/settings/new-location') Nova lokacija
+            a(href='/settings/locations/edit-location/' + location.ID)= location.name
+        a(href='/settings/new-location/') Nova lokacija
