@@ -18,9 +18,13 @@ module.exports = {
           const { email } = rows[0];
           const { role } = rows[0];
           const { ID } = rows[0];
+          const { name } = rows[0];
+          const { surname } = rows[0];
           req.session.email = email;
           req.session.role = role;
           req.session.userID = ID;
+          req.session.name = name;
+          req.session.surname = surname;
           return res.redirect('/dashboard');
         }
         req.session.error = 'Vneseno geslo ni pravilno!';
