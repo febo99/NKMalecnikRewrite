@@ -7,10 +7,10 @@ html
     body
         nav(class="navbar navbar-dark bg-primary")
             a(class="navbar-brand", href="#")
-                img(src="../images/logo-white.png", width="40", height="40", class="d-inline-block align-top ml-0", alt="", loading="lazy") 
+                img(src="../images/logo-white.png", width="40", height="40", class="d-inline-block align-top", alt="", loading="lazy") 
                 p(style="display: inline; font-size:1.2em;", class="ml-2") NK Malečnik 
-            //-script
-           //-var welcome
+        script
+            var welcome
             var date = new Date()
             var hout = date.getHours()
             var minute = date.getMinutes()
@@ -25,17 +25,29 @@ html
                 welcome = "Dober dan"
             else
                 welcome = "Dober večer"
-            document.write = "h2=" + welcome + ", " + user.email + " " + user.role;
-        h2=user.email + ' ' + user.role
-        a(href='/users/logout') Odjava
-        a(href='/players/my-players') Moji igralci
-        a(href='/players') Vsi igralci
-        a(href='/teams') Ekipe
-        a(href='/calendar') Koledar
-        a(href='/trainings') Treningi
-        a(href='/matches') Tekme
-        a(href='/presence-report') Porocilo prisotnosti
-        a(href='/scouting') Skavting
-        a(href='/payroll') Placilna lista
-        a(href='/users') Uporabniki
-        a(href='/settings') Nastavitve
+            document.querySelector('.welcome').innerHTML = 'welcome + user.email + ' ' + user.role';
+        h2.welcome
+
+        div.row
+            div.col-3
+                ul(class='nav flex-column nav-pills', style='padding-right: 35%')
+                    a(class='nav-link active', href='#') Domača stran
+                    a(class='nav-link', href='/users/logout') Odjava
+                    a(class='nav-link', href='/players/my-players') Moji igralci
+                    a(class='nav-link', href='/players') Vsi igralci
+                    a(class='nav-link', href='/teams') Ekipe
+                    a(class='nav-link', href='/calendar') Koledar
+                    a(class='nav-link', href='/trainings') Treningi
+                    a(class='nav-link', href='/matches') Tekme
+                    a(class='nav-link', href='/presence-report') Porocilo prisotnosti
+                    a(class='nav-link', href='/scouting') Skavting
+                    a(class='nav-link', href='/payroll') Placilna lista
+                    a(class='nav-link', href='/users') Uporabniki
+                    a(class='nav-link', href='/settings') Nastavitve
+        
+        script(src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous")
+        script(src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous")
+        script(src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous")
+
+        
+        
