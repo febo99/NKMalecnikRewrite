@@ -1,0 +1,12 @@
+html
+    head
+        include ../templates/header
+        title NK Malecnik
+    body
+        h1 Uporabnik
+        each user in data
+            p= user.name + ' ' + user.surname
+        a(href='users/add-user') Dodaj uporabnika
+        if error
+            each e in error
+                h4= e

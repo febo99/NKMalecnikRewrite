@@ -3,10 +3,14 @@ html
         include ../templates/header
         title NK Malecnik
     body
-        h1 Users
-        each user in data
-            p= user.name + ' ' + user.surname
-        a(href='users/add-user') Dodaj uporabnika
-        if error
-            each e in error
-                h4= e
+        include ../templates/logoBar
+        .wrapper
+            include ../templates/navbar
+            .contentWrapper
+                each user in data
+                    .userContent
+                        p= user.name + ' ' + user.surname
+                a(href='users/add-user') Dodaj uporabnika
+                if error
+                    each e in error
+                        h4= e

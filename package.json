@@ -7,7 +7,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon --exec babel-node index.js",
-    "sass:compile": "node-sass --watch --include-path public/scss public/scss/index.scss --output  public/styles/"
+    "sass:compile": "node-sass --watch --include-path public/scss public/scss/ --output  public/styles/"
   },
   "author": "",
   "license": "ISC",

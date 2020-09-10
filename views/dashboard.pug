@@ -2,36 +2,14 @@ html
     head
         include templates/header
         title NK Malecnik
-        link(rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous")
-        link(rel='stylesheet', href='https://unpkg.com/bootstrap-table@1.17.1/dist/bootstrap-table.min.css')
     body
-        nav(class="navbar navbar-dark bg-primary")
-            a(class="navbar-brand", href="#")
-                img(src="../images/logo-white.png", width="40", height="40", class="d-inline-block align-top", alt="", loading="lazy") 
-                p(style="display: inline; font-size:1.2em;", class="ml-2") NK Malečnik 
+        include templates/logoBar
         h2.welcome
         h2.user= user.name + ' ' + user.surname
 
-        div.row
-            div.col-3
-                ul(class='nav flex-column nav-pills', style='padding-right: 35%')
-                    a(class='nav-link active', href='#') Domača stran
-                    a(class='nav-link', href='/users/logout') Odjava
-                    a(class='nav-link', href='/players/my-players') Moji igralci
-                    a(class='nav-link', href='/players') Vsi igralci
-                    a(class='nav-link', href='/teams') Ekipe
-                    a(class='nav-link', href='/calendar') Koledar
-                    a(class='nav-link', href='/trainings') Treningi
-                    a(class='nav-link', href='/matches') Tekme
-                    a(class='nav-link', href='/presence-report') Porocilo prisotnosti
-                    a(class='nav-link', href='/scouting') Skavting
-                    a(class='nav-link', href='/payroll') Placilna lista
-                    a(class='nav-link', href='/users') Uporabniki
-                    a(class='nav-link', href='/settings') Nastavitve
+        include templates/navbar
         
-        script(src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous")
-        script(src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous")
-        script(src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous")
+       
 
         
         
