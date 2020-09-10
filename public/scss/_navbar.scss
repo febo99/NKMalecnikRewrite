@@ -1,0 +1,25 @@
+.customNav{
+    width: 25% ;
+    height: 100%;
+    align-items: flex-start;
+    padding: 0;
+    ul{
+        width: 100%;
+    }
+    a{
+        font-weight: bold;
+
+        color: white;
+        background-color: $base-color;
+        padding: 10px;
+        margin: 0;
+        width: 100%;
+        height: auto;
+        transition: background-color 0.5s linear;
+    }
+    a:hover{
+        text-decoration: none;
+        background-color: $primary-color-dark;
+
+    }
+}

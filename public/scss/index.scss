@@ -1,4 +1,6 @@
-@import 'colors.scss';
+@import '_colors.scss';
+@import '_logoBar.scss';
+@import '_navbar.scss';
 
 h1{
     color: $base-color;
@@ -8,12 +10,6 @@ a,input{
     display: block;
 }
 
-.container{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
 .center-login{
     text-align: center;
     display: flex;
@@ -22,3 +18,24 @@ a,input{
     align-items: center;
     margin: 25% 0 0 0;
 }
+
+.wrapper{
+    display: flex;
+    flex-direction: row;
+    height: 100vh;
+}
+
+.contentWrapper{
+    display: flex;
+    flex-direction: column;
+    justify-items: left;
+    align-content: flex-start;
+    float: right;
+}
+
+.userContent{
+    display: flex;
+    flex-direction: column;
+}
+
+@import '_mediaQueries.scss';
