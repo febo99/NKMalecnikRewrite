@@ -89,12 +89,22 @@ module.exports = {
   getUser: (req, res) => {
     if (!req.session.email) return res.redirect('/');
     const userID = req.params.id;
-    return res.locals.connection.query('SELECT *, roles.ID as roleID FROM users  INNER JOIN roles ON users.role = roles.ID WHERE users.ID = ?', [userID], (err, rows) => {
+    return res.locals.connection.query('SELECT *,users.ID as userID, roles.ID as roleID FROM users  INNER JOIN roles ON users.role = roles.ID WHERE users.ID = ?', [userID], (err, rows) => {
       if (err) {
         res.json({ error: err });
         throw err;
       }
-      return res.json({ data: rows[0] });
+      res.locals.connection.query('SELECT * FROM roles', (err2, roles) => {
+        if (err) {
+          res.json({ error: err2 });
+          throw err2;
+        }
+        const { msg } = req.session;
+        req.session.msg = null;
+        return res.render('./users/user', {
+          user: rows[0], session: req.session, roles, msg,
+        });
+      });
     });
   },
 
@@ -105,5 +115,32 @@ module.exports = {
       req.session.error = null;
       await res.locals.connection.query('SELECT * FROM roles', async (err2, roles) => res.render('./users/newUserForm', { roles, teams, error }));
     });
+  },
+
+  editUser: async (req, res) => {
+    if (!req.session.email) return res.redirect('/');
+    const userID = req.params.id;
+    const editedUser = new User(
+      String(req.body.email),
+      String(req.body.name),
+      String(req.body.surname), null,
+      String(req.body.phone),
+      Number.parseInt(req.body.role, 10),
+    );
+    return res.locals.connection.query('UPDATE users SET email = ?, name = ?, surname = ?, phone = ?, role = ? WHERE ID = ?',
+      [editedUser.email,
+        editedUser.name,
+        editedUser.surname,
+        editedUser.phone,
+        editedUser.role,
+        userID],
+      (err) => {
+        if (err) {
+          req.session.msg = `Urejanje ni bilo uspesno! Koda napake: ${err}`;
+          return res.redirect(`/users/${userID}`);
+        }
+        req.session.msg = 'Urejanje uspesno!';
+        return res.redirect(`/users/${userID}`);
+      });
   },
 };

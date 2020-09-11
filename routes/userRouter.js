@@ -5,6 +5,7 @@ const router = express.Router();
 
 router.post('/login', userController.login);
 router.post('/addUser', userController.addUser);
+router.post('/editUser/:id', userController.editUser);
 
 router.get('/add-user', userController.addUserForm);
 router.get('/logout', userController.logout);
