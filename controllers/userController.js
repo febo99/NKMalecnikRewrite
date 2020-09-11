@@ -36,9 +36,9 @@ module.exports = {
   logout: (req, res) => {
     if (req.session.email) {
       req.session.destroy();
-      return res.render('logout', { data: 'Uspesno odjavljen!' });
+      return res.render('index', { data: 'Uspesno odjavljen!' });
     }
-    return res.render('logout', { data: 'Nisi prijavljen!' });
+    return res.redirect('/');
   },
 
   addUser: (req, res) => {
@@ -118,8 +118,17 @@ module.exports = {
   },
 
   editUser: async (req, res) => {
-    if (!req.session.email) return res.redirect('/');
     const userID = req.params.id;
+    if (!req.session.email) return res.redirect('/');
+    console.log(req.session.role);
+
+    if (req.session.role !== 1) { // if user is not admin we check if he is HOYD
+      if (req.session.role !== 2) { // if user isn't HOYD we return error
+        req.session.msg = 'Nimas pravic za to operacijo!';
+        return res.redirect(`/users/${userID}`);
+      }
+    }
+
     const editedUser = new User(
       String(req.body.email),
       String(req.body.name),
@@ -127,6 +136,7 @@ module.exports = {
       String(req.body.phone),
       Number.parseInt(req.body.role, 10),
     );
+
     return res.locals.connection.query('UPDATE users SET email = ?, name = ?, surname = ?, phone = ?, role = ? WHERE ID = ?',
       [editedUser.email,
         editedUser.name,
@@ -134,12 +144,12 @@ module.exports = {
         editedUser.phone,
         editedUser.role,
         userID],
-      (err) => {
+      (err, result) => {
         if (err) {
           req.session.msg = `Urejanje ni bilo uspesno! Koda napake: ${err}`;
           return res.redirect(`/users/${userID}`);
         }
-        req.session.msg = 'Urejanje uspesno!';
+        if (result.changedRows === 1) { req.session.msg = 'Urejanje uspesno!'; } else if (result.changedRows === 0) { req.session.msg = 'Ni prislo do sprememb!'; }
         return res.redirect(`/users/${userID}`);
       });
   },
