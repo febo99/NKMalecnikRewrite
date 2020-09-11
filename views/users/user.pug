@@ -4,9 +4,18 @@ html
         title NK Malecnik
     body
         h1 Uporabnik
-        each user in data
-            p= user.name + ' ' + user.surname
-        a(href='users/add-user') Dodaj uporabnika
-        if error
-            each e in error
-                h4= e
+        p= user.name + ' ' + user.surname + ' ' + user.userID
+        form(action='/users/editUser/'+user.userID, method='post')
+            input(type='text' name='email' id='email' value=user.email) 
+            input(type='text' name='name' id='name' value=user.name)
+            input(type='text' name='surname' id='surname' value=user.surname)
+            input(type='text' name='phone' id='phone' value=user.phone)
+            select(name='role' id='role')
+                each role in roles
+                    if role.ID == user.roleID
+                        option(value= role.ID selected)= role.role
+                    else
+                        option(value= role.ID)= role.role
+            input(type='submit' value='Shrani') 
+            if msg
+                p= msg

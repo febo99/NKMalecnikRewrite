@@ -20,4 +20,6 @@ html
                     button(class='btn btn-primary', type='submit') Prijava
         if err
             h4= err
+        if data
+            h4= data
         script(src='https://unpkg.com/bootstrap-table@1.17.1/dist/bootstrap-table.min.js')
