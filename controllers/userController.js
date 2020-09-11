@@ -58,16 +58,24 @@ module.exports = {
 
     return res.locals.connection.query('SELECT * FROM users WHERE email = ?', [newUser.email], (err, rows) => {
       if (err) {
-        return res.json({ err });
+        req.session.error = `Napaka pri pridobivanju podatkov! Koda napake: ${err}`;
+        return res.redirect('/users/add-user');
       }
-      if (rows.length > 0) return res.json({ err: 'Email je ze v uporabi!' });
+      if (rows.length > 0) {
+        req.session.error = 'Email je ze v uporabi!';
+        return res.redirect('/users/add-user');
+      }
 
       return bcrypt.hash(newUser.password, saltRounds, (hashErr, hash) => {
         newUser.password = hash;
 
-        res.locals.connection.query('INSERT INTO users VALUES ?', [[newUser.parseInsert()]], (err1, result) => {
-          if (err1) return res.json({ err: err1 });
-          return res.json({ result });
+        res.locals.connection.query('INSERT INTO users VALUES ?', [[newUser.parseInsert()]], (err1) => {
+          if (err1) {
+            req.session.error = `Vstavljanje novega uporabnika neuspesno! Koda napake: ${err1}`;
+            return res.redirect('/users/add-user');
+          }
+          req.session.error = 'Vstavljanje novega uporabnika uspesno!';
+          return res.redirect('/users/add-user');
         });
       });
     });
@@ -120,7 +128,6 @@ module.exports = {
   editUser: async (req, res) => {
     const userID = req.params.id;
     if (!req.session.email) return res.redirect('/');
-    console.log(req.session.role);
 
     if (req.session.role !== 1) { // if user is not admin we check if he is HOYD
       if (req.session.role !== 2) { // if user isn't HOYD we return error
