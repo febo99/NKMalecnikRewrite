@@ -43,7 +43,12 @@ module.exports = {
 
   addUser: (req, res) => {
     if (!req.session.email) return res.json({ err: 'You are not logged in!' });
-
+    if (req.session.role !== 1) { // if user is not admin we check if he is HOYD
+      if (req.session.role !== 2) { // if user isn't HOYD we return error
+        req.session.error = 'Nimas pravic za to operacijo!';
+        return res.redirect('/users/add-user');
+      }
+    }
     const saltRounds = 10;
     const newUser = new User(String(req.body.email), String(req.body.name),
       String(req.body.surname), String(req.body.password),
