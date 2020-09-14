@@ -57,7 +57,7 @@ module.exports = {
     }
   },
 
-  addUser: (req, res) => {
+  addPlayer: (req, res) => {
     if (userLogged(req)) {
       const error = {};
       const phoneNumberRegex = /^[\d ()+-]+$/;
