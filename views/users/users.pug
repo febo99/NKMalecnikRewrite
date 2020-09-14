@@ -9,7 +9,7 @@ html
             .contentWrapper
                 each user in data
                     .userContent
-                        a(href='users/' + user.ID)= user.name + ' ' + user.surname
+                        a(href='users/' + user.ID)= `${user.name} ${user.surname}`
                 a(href='users/add-user') Dodaj uporabnika
                 if error
                     each e in error
