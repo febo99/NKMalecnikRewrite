@@ -9,7 +9,8 @@ html
             .contentWrapper
                 h2= `Dobrodosli ${user.name} ${user.surname}`
                 form(action='/dashboard/addPost',method="post")
-                    textarea#post(name="postContent", cols="30", rows="10")
+                    textarea#post(name="postContent", cols="30", rows="7", maxlength=250)
+                    p#charCounter 0/250
                     input(type="submit" value='Objavi')
                 if error
                     h4= error
@@ -20,7 +21,22 @@ html
                         .postWrapper
                             .postHeader
                                 h2= `${post.dateOfPost}, ${post.name} ${post.surname}`
-                            p= post.content
+                            .postContent
+                                p= post.content
+                            .commentForm
+                                form(action=`/dashboard/addComment/${post.postID}`,method="post")
+                                    textarea(id=`comment${post.postID}`, name="comment", cols="30", rows="2", maxlength=250)
+                                    p.commentCounter(id=`commentCounter${post.postID}`) 0/250
+                                    input(type="submit" value='Objavi')
+                            .comments
+                                if comments
+                                    each comment in comments
+                                        if comment.postID == post.postID
+                                            .commentWrapper
+                                                .commentHeader
+                                                    h5= `${comment.dateComment}, ${comment.name} ${comment.surname}`
+                                                .commentContent
+                                                    p= comment.content
        
 
         
