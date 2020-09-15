@@ -4,19 +4,36 @@ html
         title NK Malecnik
     body
         h1 Users
-        form(action='/users/addUser', method='post')
-            input(type='text' name='email' id='email' value='test@test.com') 
-            input(type='text' name='name' id='name' value='Marko')
-            input(type='text' name='surname' id='surname' value='Test')
-            input(type='password' name='password' id='password' value='123456789')
-            input(type='text' name='phone' id='phone' value='112112112')
-            select(name='team' id='team')
-                each team in teams
-                    option(value= team.ID)= team.name
-            select(name='role' id='role')
-                each role in roles
-                    option(value= role.ID)= role.role
-            input(type='submit' value='Dodaj') 
-        if error
-            each e in error
-                h4= e
+        .container
+            form(action='/users/addUser', method='post')
+                .form-group
+                    label(for='email') E-pošta:
+                    input(type='text' class='form-control' aria-describedby='emailHelp' placeholder='Vnesite e-poštni naslov.' name='email' id='email') 
+                .form-group
+                    label(for='name') Ime:
+                    input(type='text' class='form-control' placeholder='Vnesite ime.' name='name' id='name')
+                .form-group
+                    label(for='surname') Priimek:
+                    input(type='text' class='form-control' placeholder='Vnesite priimek.' name='surname' id='surname')
+                .form-group
+                    label(for='password') Geslo:
+                    input(type='password' class='form-control' placeholder='Vnesite geslo.' name='password' id='password')
+                .form-group
+                    label(for='phone') Tel. št.:
+                    input(type='text' class='form-control' placeholder='Vnesite tel. št.' name='phone' id='phone')
+                .form-group
+                    label(for='team') Ekipa:
+                    select(class='form-control' name='team' id='team')
+                        each team in teams
+                            option(value= team.ID)= team.name
+                .form-group
+                    label(for='role') Funkcija:
+                    select(class='form-control' name='role' id='role')
+                        each role in roles
+                            option(value= role.ID)= role.role
+                br
+                .form-group
+                    input(type='submit' class='btn btn-primary full-width' value='Dodaj uporabnika') 
+            if error
+                each e in error
+                    h4= e
