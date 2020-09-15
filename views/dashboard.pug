@@ -25,7 +25,7 @@ html
                                 p= post.content
                             .commentForm
                                 form(action=`/dashboard/addComment/${post.postID}`,method="post")
-                                    textarea(id=`comment${post.postID}`, name="comment", cols="30", rows="2", maxlength=250)
+                                    textarea.comment(id=`comment${post.postID}`, name="comment", cols="30", rows="2", maxlength=250, oninput=`updateCommentCharCounter(${post.postID})`)
                                     p.commentCounter(id=`commentCounter${post.postID}`) 0/250
                                     input(type="submit" value='Objavi')
                             .comments
