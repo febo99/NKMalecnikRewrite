@@ -4,11 +4,23 @@ html
         title NK Malecnik
     body
         include templates/logoBar
-        h2.welcome
-        h2.user= user.name + ' ' + user.surname
-
-        include templates/navbar
-        
+        .wrapper
+            include templates/navbar
+            .contentWrapper
+                h2= `Dobrodosli ${user.name} ${user.surname}`
+                form(action='/dashboard/addPost',method="post")
+                    textarea#post(name="postContent", cols="30", rows="10")
+                    input(type="submit" value='Objavi')
+                if error
+                    h4= error
+                if success
+                    h4= success
+                if posts
+                    each post in posts
+                        .postWrapper
+                            .postHeader
+                                h2= `${post.dateOfPost}, ${post.name} ${post.surname}`
+                            p= post.content
        
 
         

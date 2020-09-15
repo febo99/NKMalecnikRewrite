@@ -5,4 +5,6 @@ const router = express.Router();
 
 router.get('/', dashboardController.getDashboard);
 
+router.post('/addPost', dashboardController.addPost);
+
 module.exports = router;
