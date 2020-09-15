@@ -23,6 +23,9 @@ html
                                 h2= `${post.dateOfPost}, ${post.name} ${post.surname}`
                             .postContent
                                 p= post.content
+                                if user.role == 1
+                                    form(action=`/dashboard/removePost/${post.postID}`,method="post")
+                                        input(type="submit" value='Izbrisi objavo')
                             .commentForm
                                 form(action=`/dashboard/addComment/${post.postID}`,method="post")
                                     textarea.comment(id=`comment${post.postID}`, name="comment", cols="30", rows="2", maxlength=250, oninput=`updateCommentCharCounter(${post.postID})`)
@@ -37,6 +40,10 @@ html
                                                     h5= `${comment.dateComment}, ${comment.name} ${comment.surname}`
                                                 .commentContent
                                                     p= comment.content
+                                                if user.role == 1
+                                                    form(action=`/dashboard/removeComment/${comment.commentID}`,method="post")
+                                                        input(type="submit" value='Izbrisi komentar')
+
        
 
         

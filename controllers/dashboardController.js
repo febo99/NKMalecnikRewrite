@@ -102,4 +102,43 @@ module.exports = {
     req.session.error = 'Nimas pravice!';
     return res.redirect('/dashboard');
   },
+
+  removeComment: (req, res) => {
+    if (req.session.email && req.session.role === 1) {
+      const commentID = req.params.id;
+      return res.locals.connection.query('DELETE FROM comments WHERE ID = ?', commentID, (err, result) => {
+        if (err) {
+          req.session.error = `Prislo je do napake pri brisanju komentarja! Koda napake ${err}`;
+          return res.redirect('/dashboard');
+        }
+        console.log(result);
+        req.session.success = 'Komentar uspesno izbrisan!';
+        return res.redirect('/dashboard');
+      });
+    }
+    req.session.error = 'Nimas pravic!';
+    return res.redirect('/dashboard');
+  },
+
+  removePost: (req, res) => {
+    if (req.session.email && req.session.role === 1) {
+      const postID = req.params.id;
+      return res.locals.connection.query('DELETE FROM comments WHERE postID = ?', postID, (err, result) => {
+        if (err) {
+          req.session.error = `Prislo je do napake pri brisanju komentarjev! Koda napake ${err}`;
+          return res.redirect('/dashboard');
+        }
+        return res.locals.connection.query('DELETE FROM posts WHERE ID = ?', postID, (err2, result) => {
+          if (err2) {
+            req.session.error = `Prislo je do napake pri brisanju objave! Koda napake ${err2}`;
+            return res.redirect('/dashboard');
+          }
+          req.session.success = 'Objava uspesno izbrisana!';
+          return res.redirect('/dashboard');
+        });
+      });
+    }
+    req.session.error = 'Nimas pravic!';
+    return res.redirect('/dashboard');
+  },
 };
