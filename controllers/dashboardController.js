@@ -5,7 +5,8 @@ module.exports = {
       const { success } = req.session;
       req.session.error = null;
       req.session.success = null;
-      res.locals.connection.query('SELECT *, posts.ID AS postID FROM posts INNER JOIN users ON posts.created = users.ID', (err, posts) => {
+      const query = 'SELECT *, posts.ID AS postID FROM posts INNER JOIN users ON posts.created = users.ID ORDER BY pinned DESC, dateOfPost DESC ';
+      res.locals.connection.query(query, (err, posts) => {
         if (err) {
           req.session.error = `Prislo je do napake! Koda napake: ${err}`;
           return res.redirect('/dashboard');
@@ -61,7 +62,7 @@ module.exports = {
         req.session.error = 'Objava ne sme biti prazna!';
         return res.redirect('/dashboard');
       }
-      const newPost = [null, new Date(), content, req.session.userID];
+      const newPost = [null, new Date(), content, 0, 0, req.session.userID];
       return res.locals.connection.query('INSERT INTO posts VALUES ?', [[newPost]], (err) => {
         if (err) {
           req.session.error = `Prislo je do napake pri objavi! Koda napake: ${err}`;
@@ -123,12 +124,12 @@ module.exports = {
   removePost: (req, res) => {
     if (req.session.email && req.session.role === 1) {
       const postID = req.params.id;
-      return res.locals.connection.query('DELETE FROM comments WHERE postID = ?', postID, (err, result) => {
+      return res.locals.connection.query('DELETE FROM comments WHERE postID = ?', postID, (err) => {
         if (err) {
           req.session.error = `Prislo je do napake pri brisanju komentarjev! Koda napake ${err}`;
           return res.redirect('/dashboard');
         }
-        return res.locals.connection.query('DELETE FROM posts WHERE ID = ?', postID, (err2, result) => {
+        return res.locals.connection.query('DELETE FROM posts WHERE ID = ?', postID, (err2) => {
           if (err2) {
             req.session.error = `Prislo je do napake pri brisanju objave! Koda napake ${err2}`;
             return res.redirect('/dashboard');
@@ -140,5 +141,53 @@ module.exports = {
     }
     req.session.error = 'Nimas pravic!';
     return res.redirect('/dashboard');
+  },
+
+  requestPin: (req, res) => {
+    if (req.session.email) {
+      const postID = req.params.id;
+      return res.locals.connection.query('UPDATE posts SET requestPin = 1 WHERE ID = ?', postID, (err) => {
+        if (err) {
+          req.session.error = `Prislo je do napake pri zahtevku za pripenjanje objave! Koda napake ${err}`;
+          return res.redirect('/dashboard');
+        }
+        req.session.success = 'Zahteva za pripenjanje uspesno oddana!';
+        return res.redirect('/dashboard');
+      });
+    }
+    req.session.error = 'Potrebna prijava!';
+    return res.redirect('/');
+  },
+
+  setPin: (req, res) => {
+    if (req.session.email) {
+      const postID = req.params.id;
+      return res.locals.connection.query('UPDATE posts SET pinned = 1 WHERE ID = ?', postID, (err) => {
+        if (err) {
+          req.session.error = `Prislo je do napake pri pripenjanju objave! Koda napake ${err}`;
+          return res.redirect('/dashboard');
+        }
+        req.session.success = 'Objava uspesno pripeta!';
+        return res.redirect('/dashboard');
+      });
+    }
+    req.session.error = 'Potrebna prijava!';
+    return res.redirect('/');
+  },
+
+  removePin: (req, res) => {
+    if (req.session.email) {
+      const postID = req.params.id;
+      return res.locals.connection.query('UPDATE posts SET pinned = 0 WHERE ID = ?', postID, (err) => {
+        if (err) {
+          req.session.error = `Prislo je do napake pri odpenjanju objave! Koda napake ${err}`;
+          return res.redirect('/dashboard');
+        }
+        req.session.success = 'Objava uspesno odpeta!';
+        return res.redirect('/dashboard');
+      });
+    }
+    req.session.error = 'Potrebna prijava!';
+    return res.redirect('/');
   },
 };

@@ -23,6 +23,17 @@ html
                                 h2= `${post.dateOfPost}, ${post.name} ${post.surname}`
                             .postContent
                                 p= post.content
+                            .postPinRequest
+                                if post.pinned == 0
+                                    if user.role == 1
+                                        form(action=`/dashboard/pinPost/${post.postID}`,method="post")
+                                            input(type="submit" value='Pripni objavo')
+                                    else 
+                                        form(action=`/dashboard/requestPin/${post.postID}`,method="post")
+                                            input(type="submit" value='Zahtevaj pripeto objavo')
+                                else if post.pinned == 1 && user.role == 1
+                                        form(action=`/dashboard/removePin/${post.postID}`,method="post")
+                                            input(type="submit" value='Odpni objavo')
                                 if user.role == 1
                                     form(action=`/dashboard/removePost/${post.postID}`,method="post")
                                         input(type="submit" value='Izbrisi objavo')
