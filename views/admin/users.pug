@@ -7,7 +7,7 @@ html
         .wrapper
             include ../templates/navbar
             .contentWrapper
-                h1 Admin page
+                h1 Admin - sprememba gesel
                 each u in users
                    a(href='admin/change-password/' + u.ID)= u.name + ' ' + u.surname
                 if error

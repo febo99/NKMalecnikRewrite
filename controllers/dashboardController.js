@@ -53,7 +53,6 @@ module.exports = {
   addPost: (req, res) => {
     if (req.session.email) {
       const content = req.body.postContent;
-      console.log(content);
       if (content.length > 250) {
         req.session.error = 'Objava je daljsa od 250 znakov!';
         return res.redirect('/dashboard');
@@ -80,7 +79,6 @@ module.exports = {
   addComment: (req, res) => {
     if (req.session.email) {
       const content = req.body.comment;
-      console.log(content);
       if (content.length > 250) {
         req.session.error = 'Komentar je daljsi od 250 znakov!';
         return res.redirect('/dashboard');
@@ -112,7 +110,6 @@ module.exports = {
           req.session.error = `Prislo je do napake pri brisanju komentarja! Koda napake ${err}`;
           return res.redirect('/dashboard');
         }
-        console.log(result);
         req.session.success = 'Komentar uspesno izbrisan!';
         return res.redirect('/dashboard');
       });

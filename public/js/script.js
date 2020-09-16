@@ -13,7 +13,6 @@ const updateCommentCharCounter = (id) => {
 };
 
 window.addEventListener('load', () => {
-  console.log('test');
   document.querySelector('#post').addEventListener('input', updatePostCharCounter);
   updateCommentCharCounter(0);
   const commentCounter = document.querySelectorAll('.commentCounter');
