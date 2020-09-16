@@ -95,7 +95,18 @@ module.exports = {
       }
       const { error } = req.session;
       req.session.error = null;
-      await res.locals.connection.query('SELECT * FROM roles', async (err1, roles) => res.render('./users/users', { data: rows, roles, error }));
+      await res.locals.connection.query('SELECT * FROM roles', async (err1, roles) => res.render('./users/users', {
+        user: {
+          email: req.session.email,
+          role: req.session.role,
+          id: req.session.userID,
+          name: req.session.name,
+          surname: req.session.surname,
+        },
+        data: rows,
+        roles,
+        error,
+      }));
     });
   },
 
