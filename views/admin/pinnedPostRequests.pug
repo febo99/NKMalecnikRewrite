@@ -1,0 +1,23 @@
+html
+    head
+        include ../templates/header
+        title NK Malecnik
+    body
+        include ../templates/logoBar
+        .wrapper
+            include ../templates/navbar
+            .contentWrapper
+                h1 Admin - zahtevki za pripete objave
+                each request in pinRequests
+                    .requestHeader
+                        p= `${request.dateOfPost}, ${request.name} ${request.surname}`
+                    .requestContent
+                        p= request.content
+                    .requestOptions
+                        form(method='post', action=`/admin/decidePin/${request.postID}`)
+                            input(type='submit' name='accept' value='Sprejmi')
+                            input(type='submit' name='cancel' value='Zavrzi')
+                if error
+                    h4= error
+                if success
+                    h4= success
