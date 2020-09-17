@@ -53,6 +53,7 @@ app.use((req, res, next) => {
     user: process.env.DATABASE_USERNAME,
     password: process.env.DATABASE_PASSWORD,
     database: process.env.DATABASE_DB_NAME,
+    multipleStatements: true,
   });
   res.locals.connection.connect();
   next();

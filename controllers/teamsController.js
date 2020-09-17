@@ -1,4 +1,5 @@
-import { userLogged } from '../utils/checkLogin';
+import mysql from 'mysql';
+import { userLogged, isUserAdminOrHOYD } from '../utils/checkLogin';
 import Team from '../models/teamModel';
 
 module.exports = {
@@ -105,8 +106,43 @@ module.exports = {
     }
   },
 
+  movePlayersForm: (req, res) => {
+    if (userLogged(req)) {
+      const { error } = req.session;
+      req.session.error = null;
+      const teamID = req.params.id;
+      res.locals.connection.query('SELECT * FROM players WHERE teamID = ?', teamID, (err, players) => {
+        if (err) {
+          req.session.error = `Napaka pri pridobivanju igralcev! Koda napake ${err}`;
+          return res.redirect(`/teams/edit-team/${teamID}`);
+        }
+        res.locals.connection.query('SELECT * FROM teams', teamID, (err1, teams) => {
+          if (err1) {
+            req.session.error = `Napaka pri pridobivanju ekip! Koda napake ${err1}`;
+            return res.redirect(`/teams/edit-team/${teamID}`);
+          }
+          res.render('teams/movePlayers', {
+            user: {
+              email: req.session.email,
+              role: req.session.role,
+              id: req.session.userID,
+              name: req.session.name,
+              surname: req.session.surname,
+            },
+            players,
+            teams,
+            teamID,
+            error,
+          });
+        });
+      });
+    } else {
+      res.redirect('/');
+    }
+  },
+
   addTeam: (req, res) => {
-    if (userLogged(req) && (req.session.role === 2 || req.session.role === 1)) {
+    if (isUserAdminOrHOYD(req)) {
       const error = {};
       const newTeam = new Team(req.body.name, req.body.notes, req.body.coach,
         req.body.assistant, req.body.technical);
@@ -119,9 +155,13 @@ module.exports = {
           return res.redirect('/teams/add-team');
         }
 
-        return res.locals.connection.query('INSERT INTO teams VALUES ?', [[newTeam.parseInsert()]], (err1, result) => {
-          if (err1) return res.json({ err1 });
-          return res.json({ result });
+        return res.locals.connection.query('INSERT INTO teams VALUES ?', [[newTeam.parseInsert()]], (err1) => {
+          if (err1) {
+            req.session.error = `Napaka pri dodajanju ekipe! Koda napake ${err1}`;
+            return res.redirect('/teams/add-team');
+          }
+          req.session.error = 'Uspesno dodana ekipa!';
+          return res.redirect('/teams/add-team');
         });
       });
     } else {
@@ -131,7 +171,7 @@ module.exports = {
   },
 
   editTeam: (req, res) => {
-    if (userLogged(req) && (req.session.role === 2 || req.session.role === 1)) {
+    if (isUserAdminOrHOYD(req)) {
       const teamID = Number.parseInt(req.params.id, 10);
       const editTeam = new Team(req.body.name, req.body.note, req.body.coach,
         req.body.assistant, req.body.technical);
@@ -154,7 +194,7 @@ module.exports = {
   },
 
   deleteTeam: (req, res) => {
-    if (userLogged(req) && (req.session.role === 2 || req.session.role === 1)) {
+    if (isUserAdminOrHOYD(req)) {
       const teamID = Number.parseInt(req.params.id, 10);
       const playerQuery = 'UPDATE players SET teamID = 0 WHERE teamID = ?';
       res.locals.connection.query(playerQuery, teamID, (err) => {
@@ -171,6 +211,32 @@ module.exports = {
           req.session.error = 'Uspesno izbrisana ekipa!';
           return res.redirect('/teams');
         });
+      });
+    } else {
+      req.session.error = 'Nimas pravice za to operacijo!';
+      return res.redirect('/teams');
+    }
+  },
+
+  movePlayers: (req, res) => {
+    if (isUserAdminOrHOYD(req)) {
+      const teamID = Number.parseInt(req.params.id, 10);
+      const selectedTeams = Object.entries(req.body);
+      let queries = '';
+      selectedTeams.forEach((item) => {
+        const playerID = Number.parseInt(item[0].replace('player', ''), 10);
+        const newTeamID = Number.parseInt(item[1], 10);
+        queries += mysql.format(`UPDATE players SET teamID = ${newTeamID} WHERE ID = ${playerID};`);
+        // must use mysql.format() to prevent sql injection
+      });
+
+      res.locals.connection.query(queries, (err) => {
+        if (err) {
+          req.session.error = `Premik igralcev ni uspel! Koda napake: ${err}`;
+          return res.redirect(`/teams/move-players/${teamID}`);
+        }
+        req.session.error = 'Uspesen premik!';
+        return res.redirect(`/teams/move-players/${teamID}`);
       });
     } else {
       req.session.error = 'Nimas pravice za to operacijo!';

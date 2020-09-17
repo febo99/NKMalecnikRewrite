@@ -1,0 +1,19 @@
+html
+    head
+        include ../templates/header
+        title NK Malecnik
+    body
+        h1 Premakni igralce
+        if players
+            form(action=`/teams/movePlayers/${teamID}`, method='post')
+                each player in players
+                    p= `${player.name} ${player.surname}`
+                    select(name=`player${player.ID}` id='team')
+                        each team in teams
+                            if player.teamID == team.ID
+                                option(value=team.ID selected)= team.name
+                            else 
+                                option(value=team.ID )= team.name
+                input(type='submit' value='premakni')
+        if error
+            h4= error
