@@ -99,7 +99,17 @@ module.exports = {
         }
         const { error } = req.session;
         req.session.error = null;
-        return res.render('teams/newTeam', { users: rows, error });
+        return res.render('teams/newTeam', {
+          users: rows,
+          error,
+          user: {
+            email: req.session.email,
+            role: req.session.role,
+            id: req.session.userID,
+            name: req.session.name,
+            surname: req.session.surname,
+          },
+        });
       });
     } else {
       res.redirect('/');
