@@ -1,11 +1,12 @@
 module.exports = class Player {
-  constructor(name, surname, dateOfBirth, nationality, address, postNumber,
+  constructor(name, surname, dateOfBirth, nationality, gkTeam, address, postNumber,
     post, playerPhone, playerEmail, dadName, dadPhone, dadEmail,
     mumName, mumPhone, mumEmail, emso, registerNumber, note, teamID, created) {
     this.name = String(name);
     this.surname = String(surname);
     this.dateOfBirth = dateOfBirth;
     this.nationality = Number.parseInt(nationality, 10);
+    this.gkTeam = Number.parseInt(gkTeam, 10);
     this.address = String(address);
     this.postNumber = String(postNumber);
     this.post = String(post);
@@ -25,8 +26,9 @@ module.exports = class Player {
   }
 
   parseInsert() {
-    return [null, this.name, this.surname, this.dateOfBirth, this.nationality, this.address,
-      this.postNumber, this.post, this.playerPhone, this.playerEmail, this.dadName, this.dadPhone,
+    return [null, this.name, this.surname, this.dateOfBirth, this.nationality, this.gkTeam,
+      this.address, this.postNumber, this.post, this.playerPhone,
+      this.playerEmail, this.dadName, this.dadPhone,
       this.mumPhone, this.dadEmail, this.mumName,
       this.mumEmail, this.emso, this.registerNumber, this.note, this.teamID, this.created];
   }

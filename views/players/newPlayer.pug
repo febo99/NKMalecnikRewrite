@@ -20,6 +20,10 @@ html
             select(name='team' id='team')
                 each team in teams
                     option(value= team.ID)= team.name
+            select(name='gkTeam' id='gkTeam')
+                option(value=0 selected)= `Ni vratar`
+                each gkTeam in gkTeams
+                    option(value= gkTeam.ID)= gkTeam.name
             input(type='text' name='dadName' id='parentInfo' value='ata')
             input(type='text' name='dadPhone' id='parentInfo' value='123123123')
             input(type='text' name='dadEmail' id='parentInfo' value='ata@')

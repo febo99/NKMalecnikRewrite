@@ -43,14 +43,22 @@ module.exports = {
     if (userLogged(req)) {
       res.locals.connection.query('SELECT * FROM teams ', (err, rows) => {
         if (err) {
-          res.json({ error: err });
-          throw err;
+          res.session.error = `Napaka pri pridobivanju podatkov! Koda napake: ${err}`;
+          res.redirect('/players/newPlayerForm');
         }
         const { error } = req.session;
         const { oldValues } = req.session;
         req.session.error = null;
         req.session.oldValues = null;
-        return res.render('players/newPlayer', { teams: rows, error, oldValues });
+        res.locals.connection.query('SELECT * FROM goalkeeperTeams ', (err2, gkTeams) => {
+          if (err2) {
+            res.session.error = `Napaka pri pridobivanju podatkov! Koda napake: ${err2}`;
+            res.redirect('/players/newPlayerForm');
+          }
+          return res.render('players/newPlayer', {
+            teams: rows, gkTeams, error, oldValues,
+          });
+        });
       });
     } else {
       res.redirect('/');
@@ -63,7 +71,7 @@ module.exports = {
       const phoneNumberRegex = /^[\d ()+-]+$/;
 
       const newPlayer = new Player(req.body.name, req.body.surname, req.body.dateOfBirth,
-        req.body.nationality === 'on' ? 0 : 1, req.body.address, req.body.postNumber,
+        req.body.nationality === 'on' ? 0 : 1, req.body.gkTeam, req.body.address, req.body.postNumber,
         req.body.postName, req.body.playerPhone, req.body.playerEmail, req.body.dadName,
         req.body.dadPhone, req.body.dadEmail,
         req.body.mumName, req.body.mumPhone, req.body.mumEmail,
