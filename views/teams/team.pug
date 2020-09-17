@@ -1,0 +1,10 @@
+html
+    head
+        include ../templates/header
+        title NK Malecnik
+    body
+        h1= `Ekipa ${team.team}`
+        if players
+            each player in players
+                p= `${player.name} ${player.surname}`
+        a(href=`/teams/edit-team/${team.teamID}`) Uredi ekipo

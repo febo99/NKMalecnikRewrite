@@ -1,0 +1,34 @@
+html
+    head
+        include ../templates/header
+        title NK Malecnik
+    body
+        h1= team.team
+        form(action=`/teams/editTeam/${team.teamID}`, method='post')
+            input(type='text' name='name' id='name' value=`${team.team}`) 
+            input(type='text' name='note' id='note' value=`${team.notes}`)
+            select(name='coach' id='coach')
+                each user in users
+                    if user.ID == team.coachID
+                        option(value= user.ID selected)= user.name
+                    else 
+                        option(value= user.ID )= user.name
+            select(name='assistant' id='assistant')
+                option(value='0' name='noselection') Brez
+                each user in users
+                    if user.ID == team.assistantID
+                        option(value= user.ID selected)= user.name
+                    else 
+                        option(value= user.ID)= user.name
+            select(name='technical' id='technical')
+                option(value='0' name='noselection') Brez
+                each user in users
+                    if user.ID == team.technicalID
+                        option(value= user.ID selected)= user.name
+                    else 
+                        option(value= user.ID)= user.name
+            input(type='submit' value='Shrani') 
+        form(action=`/teams/deleteTeam/${team.teamID}`, method='post')
+            input(type='submit' value='Izbrisi') 
+        if error
+            h4= error
