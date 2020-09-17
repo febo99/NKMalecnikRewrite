@@ -5,5 +5,5 @@ html
     body
         h1 Ekipe
         each team in teams
-            p= team.team + ' ' + team.username
+            a(href=`/teams/team/${team.teamID}`)= `${team.team}`
         a(href='/teams/add-team') Dodaj ekipo
