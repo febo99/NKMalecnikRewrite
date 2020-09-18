@@ -223,7 +223,6 @@ module.exports = {
       const error = {};
       const phoneNumberRegex = /^[\d ()+-]+$/;
       const playerID = Number.parseInt(req.params.id, 10);
-
       const newPlayer = new Player(req.body.name, req.body.surname, req.body.dateOfBirth,
         req.body.nationality === 'on' ? 0 : 1, req.body.gkTeam, req.body.address, req.body.postNumber,
         req.body.postName, req.body.playerPhone, req.body.playerEmail, req.body.dadName,
@@ -256,21 +255,16 @@ module.exports = {
 
       if (Object.keys(error).length === 0) {
         const query = `UPDATE players SET name = ?, surname = ?, dateOfBirth = ?, nationality = ?, goalkeeperTeamID = ?, address = ?, postNumber =?,
-        post = ?, playerPhone = ?, dadName = ?, dadPhone = ?, dadEmail = ? , mumName = ?, mumPhone = ?, mumEmail = ?, emso = ?, registerNumber = ?,
-        note = ?, teamID = ? WHERE ID = ?`;
+        post = ?, playerPhone = ?, playerEmail = ?, dadName = ?, dadPhone = ?, dadEmail = ? , mumName = ?, mumPhone = ?, mumEmail = ?, emso = ?, registerNumber = ?,
+        note = ?, teamID = ? WHERE ID = ?;`;
 
-        const insertPlayer = newPlayer.parseInsert();
-        insertPlayer.splice(0, 1); // remove first item that equals to null
-        insertPlayer.splice(insertPlayer.length - 1, 1); // remove latest item sessionID
-        insertPlayer.push(playerID); // Add playerID for WHERE clause
-
-        res.locals.connection.query(query, insertPlayer, (err, result) => {
-          console.log(result);
+        const updatePlayer = newPlayer.parseUpdate(playerID);
+        console.log(updatePlayer);
+        res.locals.connection.query(query, updatePlayer, (err) => {
           if (err) {
             req.session.error = err;
             return res.redirect(`/players/edit-player/${playerID}`);
           }
-          console.log('here2');
           req.session.error = 'Uspesno urejen igralec!';
           return res.redirect(`/players/edit-player/${playerID}`);
         });

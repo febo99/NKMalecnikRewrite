@@ -29,8 +29,16 @@ module.exports = class Player {
     return [null, this.name, this.surname, this.dateOfBirth, this.nationality, this.gkTeam,
       this.address, this.postNumber, this.post, this.playerPhone,
       this.playerEmail, this.dadName, this.dadPhone,
-      this.mumPhone, this.dadEmail, this.mumName,
+      this.dadEmail, this.mumName, this.mumPhone,
       this.mumEmail, this.emso, this.registerNumber, this.note, this.teamID, this.created];
+  }
+
+  parseUpdate(playerID) {
+    return [this.name, this.surname, this.dateOfBirth, this.nationality, this.gkTeam,
+      this.address, this.postNumber, this.post, this.playerPhone,
+      this.playerEmail, this.dadName, this.dadPhone,
+      this.dadEmail, this.mumName, this.mumPhone,
+      this.mumEmail, this.emso, this.registerNumber, this.note, this.teamID, playerID];
   }
 };
 
