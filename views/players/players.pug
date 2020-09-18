@@ -3,12 +3,12 @@ html
         include ../templates/header
         title NK Malecnik
     body
-        h1 Igralci
-        if players
-            each player in players
-                p= player.name
-                p= player.surname
-                p= player.dateOfBirth
-                p= player.address + player.postNumber
-                p= player.playerEmail
-        a(href='/players/new-player') Nov igralec
+    include ../templates/logoBar
+    .wrapper
+        include ../templates/navbar
+        .contentWrapper
+            h1 Igralci
+            if players
+                each player in players
+                    a(href=`/players/edit-player/${player.ID}`)= `${player.name} ${player.surname}` 
+            a(href='/players/new-player') Nov igralec

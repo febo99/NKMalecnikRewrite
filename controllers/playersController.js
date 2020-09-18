@@ -14,7 +14,16 @@ module.exports = {
           const date = new Date(row.dateOfBirth);
           player.dateOfBirth = `${date.getDate()}.${date.getMonth() + 1}.${date.getFullYear()}`;
         });
-        return res.render('players/players', { players: rows });
+        return res.render('players/players', {
+          players: rows,
+          user: {
+            email: req.session.email,
+            role: req.session.role,
+            id: req.session.userID,
+            name: req.session.name,
+            surname: req.session.surname,
+          },
+        });
       });
     }
   },
@@ -32,7 +41,16 @@ module.exports = {
           const date = new Date(row.dateOfBirth);
           player.dateOfBirth = `${date.getDate()}.${date.getMonth() + 1}.${date.getFullYear()}`;
         });
-        return res.render('players/myPlayers', { players: rows });
+        return res.render('players/myPlayers', {
+          players: rows,
+          user: {
+            email: req.session.email,
+            role: req.session.role,
+            id: req.session.userID,
+            name: req.session.name,
+            surname: req.session.surname,
+          },
+        });
       });
     } else {
       res.redirect('/');
@@ -56,7 +74,17 @@ module.exports = {
             res.redirect('/players/newPlayerForm');
           }
           return res.render('players/newPlayer', {
-            teams: rows, gkTeams, error, oldValues,
+            teams: rows,
+            gkTeams,
+            error,
+            oldValues,
+            user: {
+              email: req.session.email,
+              role: req.session.role,
+              id: req.session.userID,
+              name: req.session.name,
+              surname: req.session.surname,
+            },
           });
         });
       });
@@ -99,9 +127,13 @@ module.exports = {
         req.session.oldValues = req.body;
         res.redirect('/players/new-player');
       } else if (Object.keys(error).length === 0) {
-        res.locals.connection.query('INSERT INTO players VALUES ?', [[newPlayer.parseInsert()]], (err, result) => {
-          if (err) return res.json({ err });
-          return res.json({ result });
+        res.locals.connection.query('INSERT INTO players VALUES ?', [[newPlayer.parseInsert()]], (err) => {
+          if (err) {
+            req.session.error = error;
+            return res.redirect('/players/new-player');
+          }
+          req.session.error = 'Uspesno dodan igralec!';
+          return res.redirect('/players/new-player');
         });
       }
     }
@@ -109,7 +141,35 @@ module.exports = {
 
   editPlayerForm: (req, res) => {
     if (userLogged(req)) {
-      res.render('/players/editPlayer');
+      const playerID = req.params.id;
+      res.locals.connection.query('SELECT * FROM players WHERE ID = ? ', playerID, (err, player) => {
+        res.locals.connection.query('SELECT * FROM teams ', (err1, teams) => {
+          if (err1) {
+            req.session.error = `Napaka pri pridobivanju podatkov! Koda napake: ${err1}`;
+            res.redirect(`/players/edit-player/${playerID}`);
+          }
+          res.locals.connection.query('SELECT * FROM goalkeeperTeams ', (err2, gkTeams) => {
+            if (err2) {
+              req.session.error = `Napaka pri pridobivanju podatkov! Koda napake: ${err1}`;
+              res.redirect(`/players/edit-player/${playerID}`);
+            }
+            // eslint-disable-next-line no-param-reassign
+            if (player[0].note === null) player[0].note = '';
+            res.render('players/editPlayer', {
+              user: {
+                email: req.session.email,
+                role: req.session.role,
+                id: req.session.userID,
+                name: req.session.name,
+                surname: req.session.surname,
+              },
+              player: player[0],
+              teams,
+              gkTeams,
+            });
+          });
+        });
+      });
     } else {
       res.redirect('/');
     }
