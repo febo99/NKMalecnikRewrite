@@ -11,5 +11,6 @@ router.get('/player/:id', playersController.getPlayer);
 
 router.post('/addPlayer', playersController.addPlayer);
 router.post('/editPlayer/:id', playersController.editPlayer);
+router.post('/deletePlayer/:id', playersController.deletePlayer);
 
 module.exports = router;

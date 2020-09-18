@@ -272,4 +272,20 @@ module.exports = {
       return res.redirect('/');
     }
   },
+
+  deletePlayer: (req, res) => {
+    if (userLogged(req)) {
+      const playerID = req.params.id;
+      res.locals.connection.query('DELETE FROM players WHERE ID = ? ', playerID, (err) => {
+        if (err) {
+          req.session.error = err;
+          return res.redirect(`/players/edit-player/${playerID}`);
+        }
+        req.session.error = 'Uspesno zbrisan igralec!';
+        return res.redirect('/players/');
+      });
+    } else {
+      return res.redirect('/');
+    }
+  },
 };
