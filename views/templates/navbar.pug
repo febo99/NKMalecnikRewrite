@@ -37,10 +37,9 @@ nav.navbar.navbar-light.bg-light.customNav
             li
                 a.nav-item.dropdown-toggle#navbarDropdown(role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false') Nastavitve
                 .dropdown-menu(aria-labelledby='navbarDropdown')
-                    a.dropdown-item(href='/settings/location') &nbsp&nbsp&nbspLokacija
                     a.dropdown-item(href='/settings/locations') &nbsp&nbsp&nbspVse lokacije
-                    a.dropdown-item(href='/settings/newLocation') &nbsp&nbsp&nbspNova lokacija
-                    a.dropdown-item(href='/settings/settings') &nbsp&nbsp&nbspNastavitve
+                    a.dropdown-item(href='/settings/new-Location') &nbsp&nbsp&nbspNova lokacija
+                    a.dropdown-item(href='/settings/') &nbsp&nbsp&nbspNastavitve
             if user.role == 1
             li
                 a.nav-item.dropdown-toggle#navbarDropdown( role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false') Admin
