@@ -14,9 +14,18 @@ nav.navbar.navbar-light.bg-light.customNav
             li
                 a.nav-item(href='/calendar') Koledar
             li
-                a.nav-item(href='/trainings') Treningi
+                a.nav-item.dropdown-toggle#navbarDropdown(role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false') Treningi
+                .dropdown-menu(aria-labelledby='navbarDropdown')
+                    a.dropdown-item(href='/trainings') &nbsp&nbsp&nbspNov trening
+                    a.dropdown-item(href='/trainings') &nbsp&nbsp&nbspMoji treningi
+                    a.dropdown-item(href='/trainings') &nbsp&nbsp&nbspVsi treningi
+                    a.dropdown-item(href='/trainings') &nbsp&nbsp&nbspPredloge treningov
             li
-                a.nav-item(href='/matches') Tekme
+                a.nav-item.dropdown-toggle#navbarDropdown(role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false') Tekme
+                .dropdown-menu(aria-labelledby='navbarDropdown')
+                    a.dropdown-item(href='/matches') &nbsp&nbsp&nbspNova tekma
+                    a.dropdown-item(href='/matches') &nbsp&nbsp&nbspMoje tekme
+                    a.dropdown-item(href='/matches') &nbsp&nbsp&nbspVse tekme
             li
                 a.nav-item(href='/presence-report') Porocilo prisotnosti
             li
@@ -26,10 +35,15 @@ nav.navbar.navbar-light.bg-light.customNav
             li
                 a.nav-item(href='/users') Uporabniki
             li
-                a.nav-item(href='/settings') Nastavitve
+                a.nav-item.dropdown-toggle#navbarDropdown(role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false') Nastavitve
+                .dropdown-menu(aria-labelledby='navbarDropdown')
+                    a.dropdown-item(href='/settings/location') &nbsp&nbsp&nbspLokacija
+                    a.dropdown-item(href='/settings/locations') &nbsp&nbsp&nbspVse lokacije
+                    a.dropdown-item(href='/settings/newLocation') &nbsp&nbsp&nbspNova lokacija
+                    a.dropdown-item(href='/settings/settings') &nbsp&nbsp&nbspNastavitve
             if user.role == 1
             li
                 a.nav-item.dropdown-toggle#navbarDropdown( role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false') Admin
                 .dropdown-menu(aria-labelledby='navbarDropdown')
-                    a.dropdown-item(href='/admin') Gesla
-                    a.dropdown-item(href='/admin/pin-requests') Pripete objave
+                    a.dropdown-item(href='/admin') &nbsp&nbsp&nbspGesla
+                    a.dropdown-item(href='/admin/pin-requests') &nbsp&nbsp&nbspPripete objave

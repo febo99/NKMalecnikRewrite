@@ -46,4 +46,22 @@ a,input{
     background-color: darkslateblue;
 }
 
+.dropdown-item{
+    font-style: none;
+    font-size:0.9em;
+    background-color:$base-color;
+}
+
+.dropdown-item:hover{
+    color:white;
+}
+
+.dropdown-menu{
+    background-color: $base-color;
+    border-radius:0px;
+    margin:0 0 0 0;
+    padding:0 0 0 0;
+    border: none;
+}
+
 @import '_mediaQueries.scss';
