@@ -7,8 +7,8 @@ html
         .wrapper
             include ../templates/navbar
             .contentWrapper
-                h1 Users
-                form(action='/players/addPlayer', method='post')
+                h1 Urejanje uporabnika
+                form(action=`/players/editPlayer/${player.ID}`, method='post')
                     input(type='text' name='name' id='name' value=`${player.name}`)
                     input(type='text' name='surname' id='surname' value=`${player.surname}`)
                     input(type='date' name='dateOfBirth' id='dateOfBirth' value=`${player.dateOfBirth}`)
@@ -44,7 +44,7 @@ html
                     input(type='text' name='mumName' id='parentInfo' value=`${player.mumName}`)
                     input(type='text' name='mumPhone' id='parentInfo' value=`${player.mumPhone}`)
                     input(type='text' name='mumEmail' id='parentInfo' value=`${player.mumEmail}`)
-                    input(type='submit' value='Dodaj') 
+                    input(type='submit' value='Shrani') 
                 if error
                     each e in error
                         h4= e

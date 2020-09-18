@@ -1,0 +1,34 @@
+html
+    head
+        include ../templates/header
+        title NK Malecnik
+    body
+        include ../templates/logoBar
+        .wrapper
+            include ../templates/navbar
+            .contentWrapper
+                h1 Podatki o igralcu
+                h4= `${player.name}`
+                h4= `${player.surname}`
+                h4= `${player.dateOfBirth}`
+                if player.nationality == 1 
+                    //if player is slovenian uncheck the nationality
+                    h4= Slovenija 
+                else
+                    h4= Tujec
+                h4= `${player.address}, ${player.postNumber}, ${player.post}`
+                h4= `${player.playerPhone} ${player.playerEmail}`
+                h4= `${player.note}`
+                h4= `${player.emso}`
+                h4= `${player.registerNumber}`
+                each team in teams
+                    if team.ID == player.teamID
+                            h4= team.name
+                each gkTeam in gkTeams
+                    if gkTeam.ID == player.goalkeeperTeamID
+                        h4= gkTeam.name
+                h4= `Ata:${player.dadName} ${player.dadPhone} ${player.dadEmail}`
+                h4= `Mama: ${player.mumName} ${player.mumPhone} ${player.mumEmail}`
+                a(href=`/players/edit-player/${player.ID}`) Uredi
+                if error
+                    h4= e

@@ -10,5 +10,5 @@ html
             h1 Igralci
             if players
                 each player in players
-                    a(href=`/players/edit-player/${player.ID}`)= `${player.name} ${player.surname}` 
+                    a(href=`/players/player/${player.ID}`)= `${player.name} ${player.surname}` 
             a(href='/players/new-player') Nov igralec

@@ -6,9 +6,11 @@ nav.navbar.navbar-light.bg-light.customNav
             li
                 a.nav-item(href='/users/logout') Odjava
             li
-                a.nav-item(href='/players/my-players') Moji igralci
-            li
-                a.nav-item(href='/players') Vsi igralci
+                a.nav-item.dropdown-toggle#navbarDropdown( role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false') Igralci
+                .dropdown-menu(aria-labelledby='navbarDropdown')
+                    a.dropdown-item(href='/players') Vsi igralci
+                    a.dropdown-item(href='/players/my-players') Moji igralci
+                    a.dropdown-item(href='/players/new-player') Dodaj igralca
             li
                 a.nav-item(href='/teams') Ekipe
             li
