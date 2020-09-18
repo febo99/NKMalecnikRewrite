@@ -259,7 +259,6 @@ module.exports = {
         note = ?, teamID = ? WHERE ID = ?;`;
 
         const updatePlayer = newPlayer.parseUpdate(playerID);
-        console.log(updatePlayer);
         res.locals.connection.query(query, updatePlayer, (err) => {
           if (err) {
             req.session.error = err;
