@@ -3,4 +3,14 @@ html
         include ../templates/header
         title NK Malecnik
     body
-        h1 Treningi
+    include ../templates/logoBar
+    .wrapper
+        include ../templates/navbar
+        .contentWrapper
+            h1 Treningi
+            if trainings
+                each training in trainings
+                    a(href=`/trainings/${training.ID}`)= `${training.title}` 
+            a(href='/trainings/new-training/') Nov trening
+            if err
+                h4= err
