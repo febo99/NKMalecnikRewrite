@@ -1,0 +1,29 @@
+html
+    head
+        include ../templates/header
+        title NK Malecnik
+    body
+    include ../templates/logoBar
+    .wrapper
+        include ../templates/navbar
+        .contentWrapper
+            h1 Trening
+            p= training.title
+
+            //- Check if user has enough permissions to edit/delete training
+            //- Multiple if's so we dont have multiple links/buttons
+            if user.id == training.created
+                a(href=`/trainings/edit-training/${training.ID}`) Uredi
+                form(action=`/trainings/deleteTraining/${training.ID}` method='post')
+                    input(type='submit' value='izbrisi')
+            if user.role == 1 && user.id != training.created
+                a(href=`/trainings/edit-training/${training.ID}`) Uredi
+                form(action=`/trainings/deleteTraining/${training.ID}` method='post')
+                    input(type='submit' value='izbrisi')
+            if user.role == 2 && user.id != training.created
+                a(href=`/trainings/edit-training/${training.ID}`) Uredi
+                form(action=`/trainings/deleteTraining/${training.ID}` method='post')
+                    input(type='submit' value='izbrisi')
+            if error
+                each err in error 
+                    h4= err

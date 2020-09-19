@@ -7,15 +7,22 @@ module.exports = {
     if (userLogged(req)) {
       const { error } = req.session;
       req.session.error = null;
-      res.render('trainings/trainings', {
-        user: {
-          email: req.session.email,
-          role: req.session.role,
-          id: req.session.userID,
-          name: req.session.name,
-          surname: req.session.surname,
-        },
-        error,
+      res.locals.connection.query('SELECT * FROM trainings', (err, trainings) => {
+        if (err) {
+          req.session.error = { error: `Napaka pri pridobivanju treningov! Koda napake: ${err}` };
+          res.redirect('/');
+        }
+        res.render('trainings/trainings', {
+          user: {
+            email: req.session.email,
+            role: req.session.role,
+            id: req.session.userID,
+            name: req.session.name,
+            surname: req.session.surname,
+          },
+          error,
+          trainings,
+        });
       });
     } else {
       res.redirect('/');
@@ -23,16 +30,27 @@ module.exports = {
   },
 
   getTraining: (req, res) => {
-    const trainingID = req.body.id;
-    res.render('trainings/training', {
-      user: {
-        email: req.session.email,
-        role: req.session.role,
-        id: req.session.userID,
-        name: req.session.name,
-        surname: req.session.surname,
-      },
-    });
+    const trainingID = Number.parseInt(req.params.id, 10);
+    if (userLogged(req)) {
+      res.locals.connection.query('SELECT * FROM trainings WHERE ID = ?', trainingID, (err, training) => {
+        if (err) {
+          req.session.error = { error: `Napaka pri pridobivanju treninga! Koda napake: ${err}` };
+          return res.redirect('/trainings');
+        }
+        res.render('trainings/training', {
+          user: {
+            email: req.session.email,
+            role: req.session.role,
+            id: req.session.userID,
+            name: req.session.name,
+            surname: req.session.surname,
+          },
+          training: training[0],
+        });
+      });
+    } else {
+      res.redirect('/');
+    }
   },
 
   newTrainingForm: (req, res) => {

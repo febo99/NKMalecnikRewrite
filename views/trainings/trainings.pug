@@ -10,7 +10,8 @@ html
             h1 Treningi
             if trainings
                 each training in trainings
-                    a(href=`/trainings/${training.ID}`)= `${training.title}` 
+                    a(href=`/trainings/training/${training.ID}`)= `${training.title}` 
             a(href='/trainings/new-training/') Nov trening
-            if err
-                h4= err
+            if error
+                each err in error
+                    h4= err
