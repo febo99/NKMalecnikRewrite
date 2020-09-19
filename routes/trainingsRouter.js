@@ -7,4 +7,6 @@ router.get('/', trainingController.trainings);
 router.get('/training/:id', trainingController.getTraining);
 router.get('/new-training', trainingController.newTrainingForm);
 
+router.post('/addTraining', trainingController.addTraining);
+
 module.exports = router;
