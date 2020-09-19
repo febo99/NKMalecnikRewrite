@@ -9,12 +9,11 @@ html
         .contentWrapper
             h1 Nov trening
             form(action='/trainings/addTraining' method='post')
-                select(name='team' id='team' disabled)
+                input(type='text' name='title')
+                select(name='team' id='team')
                     each team in teams
-                        if team.ID == user.id
+                        if team.coachID == user.id
                             option(value=`${team.ID}` selected)= team.name
-                        else
-                            option(value=`${team.ID}`)= team.name
                 input(type='date' name='date')
                 input(type='time' name='startTime')
                 input(type='number' name='duration' min=0 )
@@ -28,5 +27,6 @@ html
                 textarea(name='end' rows=10 columns=30)
                 input(type='file' name='attachments' multiple)
                 input(type='submit' value='Dodaj')
-            if err
-                h4= err
+            if error
+                each err in error 
+                    h4= err
