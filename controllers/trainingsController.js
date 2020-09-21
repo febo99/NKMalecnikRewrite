@@ -114,16 +114,53 @@ module.exports = {
         req.body.main, req.body.end, req.body.report,
         req.body.location, startDatetime, endTime, null, req.body.team, req.session.userID);
 
-      res.locals.connection.query('INSERT INTO trainings VALUES ?', [[newTraining.parseInsert()]], (err) => {
+      res.locals.connection.query('INSERT INTO trainings VALUES ?', [[newTraining.parseInsert()]], (err, training) => {
         if (err) {
           error.insertError = `Napaka pri vstavljanju! Koda napake ${err}`;
           req.session.error = error;
           return res.redirect('/trainings/new-training');
         }
 
-        error.success = 'Trening uspesno vstavljen';
-        req.session.error = error;
-        return res.redirect('/trainings/new-training');
+        res.locals.connection.query('SELECT * FROM players WHERE teamID = ?', newTraining.teamID, (err1, players) => {
+          if (err1) {
+            error.error = `Napaka pri pridobivanju podatkov! Koda napake ${err1}`;
+            req.session.error = error;
+            return res.redirect('/trainings/new-training');
+          }
+          const presencePlayers = [];
+          players.forEach((item) => {
+            presencePlayers.push([null, 0, Number.parseInt(training.insertId, 10),
+              Number.parseInt(item.ID, 10)]);
+          });
+
+          res.locals.connection.query('INSERT INTO presenceTrainings VALUES ?', [presencePlayers], (err2) => {
+            if (err2) {
+              error.insertError = `Napaka pri vstavljanju za prisotnost! Koda napake ${err2}`;
+              req.session.error = error;
+              return res.redirect('/trainings/new-training');
+            }
+            error.success = 'Trening uspesno vstavljen';
+            req.session.error = error;
+            return res.redirect(`/trainings/training/${training.insertId}`);
+          });
+        });
+      });
+    } else {
+      res.redirect('/');
+    }
+  },
+
+  deleteTraining: (req, res) => {
+    const trainingID = Number.parseInt(req.params.id, 10);
+    if (userLogged(req)) {
+      const error = {};
+      res.locals.connection.query('DELETE FROM trainings WHERE ID = ?', trainingID, (err) => {
+        if (err) {
+          error.error = `Brisanje ni bilo uspesno! Koda napake: ${trainingID}`;
+          req.session.error = error;
+          return res.redirect(`/trainings/training/${trainingID}`);
+        }
+        res.redirect('/trainings');
       });
     } else {
       res.redirect('/');

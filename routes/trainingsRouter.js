@@ -8,5 +8,6 @@ router.get('/training/:id', trainingController.getTraining);
 router.get('/new-training', trainingController.newTrainingForm);
 
 router.post('/addTraining', trainingController.addTraining);
+router.post('/deleteTraining/:id', trainingController.deleteTraining);
 
 module.exports = router;
