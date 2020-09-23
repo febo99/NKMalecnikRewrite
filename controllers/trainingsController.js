@@ -1,6 +1,7 @@
 import moment from 'moment';
 import { userLogged } from '../utils/checkLogin';
 import Training from '../models/trainingModel';
+import { htmlInputFormatDate } from '../utils/formatDate';
 
 module.exports = {
   trainings: (req, res) => {
@@ -79,6 +80,56 @@ module.exports = {
             locations,
             teams,
             error,
+          });
+        });
+      });
+    } else {
+      res.redirect('/');
+    }
+  },
+  editTrainingForm: (req, res) => {
+    if (userLogged(req)) {
+      const { error } = req.session;
+      req.session.error = null;
+      const trainingID = req.params.id;
+      res.locals.connection.query('SELECT * FROM locations', (err, locations) => {
+        if (err) {
+          req.session.error = `Napaka pri pridobivanju lokacij! Koda napake ${err}`;
+          return res.redirect(`/trainings/training/${trainingID}`);
+        }
+        res.locals.connection.query('SELECT * FROM teams', (err1, teams) => {
+          if (err1) {
+            req.session.error = `Napaka pri pridobivanju ekip! Koda napake ${err1}`;
+            return res.redirect(`/trainings/training/${trainingID}`);
+          }
+          res.locals.connection.query('SELECT * FROM trainings WHERE ID = ?', trainingID, (err2, training) => {
+            if (err2) {
+              req.session.error = `Napaka pri pridobivanju ekip! Koda napake ${err1}`;
+              return res.redirect(`/trainings/training/${trainingID}`);
+            }
+
+            const editTraining = training[0];
+            const startTime = moment(editTraining.startTime);
+            const endTime = moment(editTraining.endTime);
+
+            // format data from db to HTML format
+            editTraining.dateOfTraining = htmlInputFormatDate(editTraining.dateOfTraining);
+            editTraining.startTime = moment(editTraining.startTime).format('hh:mm');
+            editTraining.duration = endTime.diff(startTime, 'minutes');
+
+            res.render('trainings/editTraining', {
+              user: {
+                email: req.session.email,
+                role: req.session.role,
+                id: req.session.userID,
+                name: req.session.name,
+                surname: req.session.surname,
+              },
+              locations,
+              teams,
+              error,
+              training: editTraining,
+            });
           });
         });
       });

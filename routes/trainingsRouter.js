@@ -6,6 +6,7 @@ const router = express.Router();
 router.get('/', trainingController.trainings);
 router.get('/training/:id', trainingController.getTraining);
 router.get('/new-training', trainingController.newTrainingForm);
+router.get('/edit-training/:id', trainingController.editTrainingForm);
 
 router.post('/addTraining', trainingController.addTraining);
 router.post('/deleteTraining/:id', trainingController.deleteTraining);
