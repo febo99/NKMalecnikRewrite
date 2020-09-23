@@ -1,5 +1,5 @@
 import moment from 'moment';
-import { userLogged } from '../utils/checkLogin';
+import { userLogged, isUserAdminOrHOYD } from '../utils/checkLogin';
 import Training from '../models/trainingModel';
 import { htmlInputFormatDate } from '../utils/formatDate';
 
@@ -87,6 +87,7 @@ module.exports = {
       res.redirect('/');
     }
   },
+
   editTrainingForm: (req, res) => {
     if (userLogged(req)) {
       const { error } = req.session;
@@ -106,6 +107,13 @@ module.exports = {
             if (err2) {
               req.session.error = `Napaka pri pridobivanju ekip! Koda napake ${err1}`;
               return res.redirect(`/trainings/training/${trainingID}`);
+            }
+
+            if (training[0].created !== req.session.userID) { // if user isnt creator
+              if (!isUserAdminOrHOYD(req)) { // if user isnt admin or hoyd
+                req.session.error = 'Nimas pravic za ogled vsebine';
+                return res.redirect(`/trainings/training/${trainingID}`);
+              }
             }
 
             const editTraining = training[0];
@@ -212,6 +220,59 @@ module.exports = {
           return res.redirect(`/trainings/training/${trainingID}`);
         }
         res.redirect('/trainings');
+      });
+    } else {
+      res.redirect('/');
+    }
+  },
+
+  editTraining: (req, res) => {
+    if (userLogged(req)) {
+      const trainingID = req.params.id;
+      const { startTime } = req.body;
+      const startTimeArray = startTime.split(':'); // split string to hours and minutes
+      const duration = Number.parseInt(req.body.duration, 10);
+      // set hours and minutes separately
+      let startDatetime = new Date(req.body.date).setHours(Number(startTimeArray[0]));
+      startDatetime = new Date(startDatetime).setMinutes(Number(startTimeArray[1]));
+      // use moment to add minutes to date
+      const endTime = moment(new Date(startDatetime)).add(duration, 'm').toDate();
+
+      // Validate inputs
+      const error = {};
+      if (req.body.title === '' || !req.body.title) error.titleError = 'Prosim vnesi naslov treninga!';
+      if (!req.body.date) error.dateError = 'Vnesen datum ni pravilen!';
+      if (req.body.duration < 0) error.durationError = 'Trajanje more biti pozitivno stevilo!';
+      else if (!req.body.duration) error.noDurationError = 'Prosim vnesi trajanje!';
+
+      if (Object.keys(error).length !== 0) { // check if error object contains any keys
+        req.session.error = error;
+        return res.redirect(`/trainings/edit-training/${trainingID}`);
+      }
+
+      const newTraining = new Training(req.body.title, req.body.date, req.body.intro,
+        req.body.main, req.body.end, req.body.report,
+        req.body.location, startDatetime, endTime, null, req.body.team, req.session.userID);
+
+      const editTraining = newTraining.parseInsert();
+
+      editTraining.splice(0, 1); // remove ID field
+      editTraining[editTraining.length - 1] = trainingID;
+
+      const editQuery = `UPDATE trainings SET title = ?, dateOfTraining = ?, intro = ?, main = ?,
+       end = ?, report = ?, locationID = ?, startTime = ?, endTime = ?, attachment = ?, teamID = ?
+       WHERE ID = ?`;
+
+      res.locals.connection.query(editQuery, editTraining, (err) => {
+        if (err) {
+          error.insertError = `Napaka pri urejanju! Koda napake ${err}`;
+          req.session.error = error;
+          return res.redirect(`/trainings/edit-training/${trainingID}`);
+        }
+
+        error.success = 'Trening uspesno urejen';
+        req.session.error = error;
+        return res.redirect(`/trainings/training/${trainingID}`);
       });
     } else {
       res.redirect('/');
