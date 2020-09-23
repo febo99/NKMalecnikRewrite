@@ -16,7 +16,10 @@ nav.navbar.navbar-light.bg-light.customNav
             li
                 a.nav-item(href='/calendar') Koledar
             li
-                a.nav-item(href='/trainings') Treningi
+                a.nav-item.dropdown-toggle#navbarDropdown( role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false') Treningi
+                .dropdown-menu(aria-labelledby='navbarDropdown')
+                    a.dropdown-item(href='/trainings') Seznam treningov
+                    a.dropdown-item(href='/trainings/new-training') Dodaj trening
             li
                 a.nav-item.dropdown-toggle#navbarDropdown( role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false') Tekme
                 .dropdown-menu(aria-labelledby='navbarDropdown')
