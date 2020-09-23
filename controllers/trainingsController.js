@@ -32,21 +32,34 @@ module.exports = {
 
   getTraining: (req, res) => {
     const trainingID = Number.parseInt(req.params.id, 10);
+    const firstAdd = req.session.added ? 'show' : 'hide';
+    req.session.added = null;
     if (userLogged(req)) {
       res.locals.connection.query('SELECT * FROM trainings WHERE ID = ?', trainingID, (err, training) => {
         if (err) {
           req.session.error = { error: `Napaka pri pridobivanju treninga! Koda napake: ${err}` };
           return res.redirect('/trainings');
         }
-        res.render('trainings/training', {
-          user: {
-            email: req.session.email,
-            role: req.session.role,
-            id: req.session.userID,
-            name: req.session.name,
-            surname: req.session.surname,
-          },
-          training: training[0],
+        const query = `SELECT *, presenceTrainings.ID AS presenceID FROM presenceTrainings INNER JOIN players 
+        ON presenceTrainings.playerID = players.ID WHERE trainingID = ?`;
+        res.locals.connection.query(query, trainingID, (err1, presence) => {
+          if (err1) {
+            req.session.error = { error: `Napaka pri pridobivanju prisotnosti! Koda napake: ${err1}` };
+            return res.redirect('/trainings');
+          }
+
+          res.render('trainings/training', {
+            user: {
+              email: req.session.email,
+              role: req.session.role,
+              id: req.session.userID,
+              name: req.session.name,
+              surname: req.session.surname,
+            },
+            training: training[0],
+            presence,
+            firstAdd,
+          });
         });
       });
     } else {
@@ -200,6 +213,7 @@ module.exports = {
             }
             error.success = 'Trening uspesno vstavljen';
             req.session.error = error;
+            req.session.added = true;
             return res.redirect(`/trainings/training/${training.insertId}`);
           });
         });

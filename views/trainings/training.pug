@@ -1,6 +1,7 @@
 html
     head
         include ../templates/header
+        script(src="/js/presence.js")
         title NK Malecnik
     body
     include ../templates/logoBar
@@ -16,14 +17,18 @@ html
                 a(href=`/trainings/edit-training/${training.ID}`) Uredi
                 form(action=`/trainings/deleteTraining/${training.ID}` method='post')
                     input(type='submit' value='izbrisi')
+                button#openTrainingModal(type='button' class=`btn btn-primary ${firstAdd}` data-toggle='modal' data-target='#trainingModal') Prisotnost
             if user.role == 1 && user.id != training.created
                 a(href=`/trainings/edit-training/${training.ID}`) Uredi
                 form(action=`/trainings/deleteTraining/${training.ID}` method='post')
                     input(type='submit' value='izbrisi')
+                button#openTrainingModal(type='button' class=`btn btn-primary ${firstAdd}` data-toggle='modal' data-target='#trainingModal') Prisotnost
             if user.role == 2 && user.id != training.created
                 a(href=`/trainings/edit-training/${training.ID}`) Uredi
                 form(action=`/trainings/deleteTraining/${training.ID}` method='post')
                     input(type='submit' value='izbrisi')
+                button#openTrainingModal(type='button' class=`btn btn-primary ${firstAdd}` data-toggle='modal' data-target='#trainingModal') Prisotnost
+            include ../templates/presenceTraining
             if error
                 each err in error 
                     h4= err
