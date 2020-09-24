@@ -197,6 +197,14 @@ module.exports = {
       if (req.files) {
         req.files.forEach((item) => {
           const file = item.originalname.replace(' ', '_').replace(',', '_');
+
+          const extension = file.split('.').pop();
+          if (extension !== 'png' && extension !== 'jpg' && extension !== 'jpeg' && extension !== 'gif' && extension !== 'svg' && extension !== 'pdf') {
+            error.extensionError = 'Dovoljene so samo datoteke .png, .jpg, .jpeg, .gif, .svg in .pdf!';
+            req.session.error = error;
+            return res.redirect('/trainings/new-training');
+          }
+
           attachments.push(file);
         });
       }
@@ -278,11 +286,19 @@ module.exports = {
       startDatetime = new Date(startDatetime).setMinutes(Number(startTimeArray[1]));
       // use moment to add minutes to date
       const endTime = moment(new Date(startDatetime)).add(duration, 'm').toDate();
+      const error = {};
 
       let attachments = [];
       if (req.files) {
         req.files.forEach((item) => {
           const file = item.originalname.replace(' ', '_').replace(',', '_');
+          const extension = file.split('.').pop();
+
+          if (extension !== 'png' && extension !== 'jpg' && extension !== 'jpeg' && extension !== 'gif' && extension !== 'svg' && extension !== 'pdf') {
+            error.extensionError = 'Dovoljene so samo datoteke .png, .jpg, .jpeg, .gif, .svg in .pdf!';
+            req.session.error = error;
+            return res.redirect(`/trainings/edit-training/${trainingID}`);
+          }
           attachments.push(file);
         });
       }
@@ -290,7 +306,7 @@ module.exports = {
       if (attachments.length === 0) attachments = null;
       else attachments = attachments.join();
       // Validate inputs
-      const error = {};
+
       if (req.body.title === '' || !req.body.title) error.titleError = 'Prosim vnesi naslov treninga!';
       if (!req.body.date) error.dateError = 'Vnesen datum ni pravilen!';
       if (req.body.duration < 0) error.durationError = 'Trajanje more biti pozitivno stevilo!';

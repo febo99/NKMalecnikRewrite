@@ -32,7 +32,7 @@ html
             if training.attachment
                 - var counter = 1
                 each attachment in training.attachment
-                    a(href=`/uploads/${attachment}`)= `Priponka ${counter++} (${attachment})`
+                    a(href=`/uploads/${attachment}` target='_blank')= `Priponka ${counter++} (${attachment})`
             include ../templates/presenceTraining
             if error
                 each err in error 

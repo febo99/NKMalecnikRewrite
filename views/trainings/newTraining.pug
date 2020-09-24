@@ -25,7 +25,7 @@ html
                 textarea(name='intro' rows=10 columns=30)
                 textarea(name='main' rows=10 columns=30)
                 textarea(name='end' rows=10 columns=30)
-                input(type='file' name='attachments' multiple)
+                input(type='file' name='attachments' accept='.jpg, .jpeg, .pdf, .png, .svg, .gif' multiple)
                 input(type='submit' value='Dodaj')
             if error
                 each err in error 

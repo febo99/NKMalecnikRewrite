@@ -33,8 +33,8 @@ html
                 if training.attachment
                     - var counter = 1
                     each attachment in training.attachment
-                        a(href=`/uploads/${attachment}`)= `Priponka ${counter++} (${attachment})`
-                input(type='file' name='attachments' multiple)
+                        a(href=`/uploads/${attachment}` target='_blank')= `Priponka ${counter++} (${attachment})`
+                input(type='file' name='attachments' accept='.jpg, .jpeg, .pdf, .png, .svg, .gif' multiple)
                 input(type='submit' value='Shrani')
             if error
                 each err in error 
