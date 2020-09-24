@@ -48,6 +48,11 @@ module.exports = {
             return res.redirect('/trainings');
           }
 
+          const returnTraining = training[0];
+          if (training[0].attachment !== null) {
+            returnTraining.attachment = training[0].attachment.split(',');
+          }
+
           res.render('trainings/training', {
             user: {
               email: req.session.email,
@@ -56,7 +61,7 @@ module.exports = {
               name: req.session.name,
               surname: req.session.surname,
             },
-            training: training[0],
+            training: returnTraining,
             presence,
             firstAdd,
           });
@@ -133,6 +138,10 @@ module.exports = {
             const startTime = moment(editTraining.startTime);
             const endTime = moment(editTraining.endTime);
 
+            if (training[0].attachment !== null) {
+              editTraining.attachment = training[0].attachment.split(',');
+            }
+
             // format data from db to HTML format
             editTraining.dateOfTraining = htmlInputFormatDate(editTraining.dateOfTraining);
             editTraining.startTime = moment(editTraining.startTime).format('hh:mm');
@@ -162,6 +171,7 @@ module.exports = {
   addTraining: (req, res) => {
     if (userLogged(req)) {
       const { startTime } = req.body;
+      console.log(req.files);
       const startTimeArray = startTime.split(':'); // split string to hours and minutes
       const duration = Number.parseInt(req.body.duration, 10);
       // set hours and minutes separately
@@ -182,9 +192,29 @@ module.exports = {
         return res.redirect('/trainings/new-training');
       }
 
+      // Parsing files, saving to uploads/ and to db
+      let attachments = [];
+      if (req.files) {
+        req.files.forEach((item) => {
+          const file = item.originalname.replace(' ', '_').replace(',', '_');
+
+          const extension = file.split('.').pop();
+          if (extension !== 'png' && extension !== 'jpg' && extension !== 'jpeg' && extension !== 'gif' && extension !== 'svg' && extension !== 'pdf') {
+            error.extensionError = 'Dovoljene so samo datoteke .png, .jpg, .jpeg, .gif, .svg in .pdf!';
+            req.session.error = error;
+            return res.redirect('/trainings/new-training');
+          }
+
+          attachments.push(file);
+        });
+      }
+      if (attachments.length === 0) attachments = null;
+      else attachments = attachments.join();
+
       const newTraining = new Training(req.body.title, req.body.date, req.body.intro,
         req.body.main, req.body.end, req.body.report,
-        req.body.location, startDatetime, endTime, null, req.body.team, req.session.userID);
+        req.body.location, startDatetime, endTime, attachments,
+        req.body.team, req.session.userID);
 
       res.locals.connection.query('INSERT INTO trainings VALUES ?', [[newTraining.parseInsert()]], (err, training) => {
         if (err) {
@@ -200,6 +230,11 @@ module.exports = {
             return res.redirect('/trainings/new-training');
           }
           const presencePlayers = [];
+          if (players.length === 0) {
+            error.insertError = 'Ekipa nima vnesenih igralcev! Dodaj igralce v ekipo!';
+            req.session.error = error;
+            return res.redirect('/trainings/new-training');
+          }
           players.forEach((item) => {
             presencePlayers.push([null, 0, Number.parseInt(training.insertId, 10),
               Number.parseInt(item.ID, 10)]);
@@ -251,9 +286,27 @@ module.exports = {
       startDatetime = new Date(startDatetime).setMinutes(Number(startTimeArray[1]));
       // use moment to add minutes to date
       const endTime = moment(new Date(startDatetime)).add(duration, 'm').toDate();
-
-      // Validate inputs
       const error = {};
+
+      let attachments = [];
+      if (req.files) {
+        req.files.forEach((item) => {
+          const file = item.originalname.replace(' ', '_').replace(',', '_');
+          const extension = file.split('.').pop();
+
+          if (extension !== 'png' && extension !== 'jpg' && extension !== 'jpeg' && extension !== 'gif' && extension !== 'svg' && extension !== 'pdf') {
+            error.extensionError = 'Dovoljene so samo datoteke .png, .jpg, .jpeg, .gif, .svg in .pdf!';
+            req.session.error = error;
+            return res.redirect(`/trainings/edit-training/${trainingID}`);
+          }
+          attachments.push(file);
+        });
+      }
+
+      if (attachments.length === 0) attachments = null;
+      else attachments = attachments.join();
+      // Validate inputs
+
       if (req.body.title === '' || !req.body.title) error.titleError = 'Prosim vnesi naslov treninga!';
       if (!req.body.date) error.dateError = 'Vnesen datum ni pravilen!';
       if (req.body.duration < 0) error.durationError = 'Trajanje more biti pozitivno stevilo!';
@@ -266,7 +319,7 @@ module.exports = {
 
       const newTraining = new Training(req.body.title, req.body.date, req.body.intro,
         req.body.main, req.body.end, req.body.report,
-        req.body.location, startDatetime, endTime, null, req.body.team, req.session.userID);
+        req.body.location, startDatetime, endTime, attachments, req.body.team, req.session.userID);
 
       const editTraining = newTraining.parseInsert();
 

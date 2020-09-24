@@ -33,6 +33,7 @@ app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, 'views'));
 
 app.use(express.static(`${__dirname}/public`));
+app.use(express.static(`${__dirname}/uploads`));
 
 app.use(morgan('combined', { stream: logger }));
 

@@ -17,17 +17,22 @@ html
                 a(href=`/trainings/edit-training/${training.ID}`) Uredi
                 form(action=`/trainings/deleteTraining/${training.ID}` method='post')
                     input(type='submit' value='izbrisi')
-                button#openTrainingModal(type='button' class=`btn btn-primary ${firstAdd}` data-toggle='modal' data-target='#trainingModal') Prisotnost
+                button#openTrainingModal(type='button' class=`btn btn-primary ${firstAdd}` data-toggle='modal' data-target='#trainingModal') Uredi prisotnost
             if user.role == 1 && user.id != training.created
                 a(href=`/trainings/edit-training/${training.ID}`) Uredi
                 form(action=`/trainings/deleteTraining/${training.ID}` method='post')
                     input(type='submit' value='izbrisi')
-                button#openTrainingModal(type='button' class=`btn btn-primary ${firstAdd}` data-toggle='modal' data-target='#trainingModal') Prisotnost
+                button#openTrainingModal(type='button' class=`btn btn-primary ${firstAdd}` data-toggle='modal' data-target='#trainingModal') Uredi prisotnost
             if user.role == 2 && user.id != training.created
                 a(href=`/trainings/edit-training/${training.ID}`) Uredi
                 form(action=`/trainings/deleteTraining/${training.ID}` method='post')
                     input(type='submit' value='izbrisi')
-                button#openTrainingModal(type='button' class=`btn btn-primary ${firstAdd}` data-toggle='modal' data-target='#trainingModal') Prisotnost
+                button#openTrainingModal(type='button' class=`btn btn-primary ${firstAdd}` data-toggle='modal' data-target='#trainingModal') Uredi prisotnost
+            h3 Priponke
+            if training.attachment
+                - var counter = 1
+                each attachment in training.attachment
+                    a(href=`/uploads/${attachment}` target='_blank')= `Priponka ${counter++} (${attachment})`
             include ../templates/presenceTraining
             if error
                 each err in error 

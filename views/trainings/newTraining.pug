@@ -8,7 +8,7 @@ html
         include ../templates/navbar
         .contentWrapper
             h1 Nov trening
-            form(action='/trainings/addTraining' method='post')
+            form(action='/trainings/addTraining' method='post' enctype='multipart/form-data')
                 input(type='text' name='title')
                 select(name='team' id='team')
                     each team in teams
@@ -25,7 +25,7 @@ html
                 textarea(name='intro' rows=10 columns=30)
                 textarea(name='main' rows=10 columns=30)
                 textarea(name='end' rows=10 columns=30)
-                input(type='file' name='attachments' multiple)
+                input(type='file' name='attachments' accept='.jpg, .jpeg, .pdf, .png, .svg, .gif' multiple)
                 input(type='submit' value='Dodaj')
             if error
                 each err in error 
