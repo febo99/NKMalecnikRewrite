@@ -162,6 +162,7 @@ module.exports = {
   addTraining: (req, res) => {
     if (userLogged(req)) {
       const { startTime } = req.body;
+      console.log(req.files);
       const startTimeArray = startTime.split(':'); // split string to hours and minutes
       const duration = Number.parseInt(req.body.duration, 10);
       // set hours and minutes separately
@@ -182,9 +183,20 @@ module.exports = {
         return res.redirect('/trainings/new-training');
       }
 
+      // Parsing files, saving to uploads/ and to db
+      let attachments = [];
+      req.files.forEach((item) => {
+        const file = item.originalname.replace(' ', '_').replace(',', '_');
+        attachments.push(file);
+      });
+
+      if (attachments.length === 0) attachments = null;
+      else attachments = attachments.join();
+
       const newTraining = new Training(req.body.title, req.body.date, req.body.intro,
         req.body.main, req.body.end, req.body.report,
-        req.body.location, startDatetime, endTime, null, req.body.team, req.session.userID);
+        req.body.location, startDatetime, endTime, attachments,
+        req.body.team, req.session.userID);
 
       res.locals.connection.query('INSERT INTO trainings VALUES ?', [[newTraining.parseInsert()]], (err, training) => {
         if (err) {
@@ -200,6 +212,11 @@ module.exports = {
             return res.redirect('/trainings/new-training');
           }
           const presencePlayers = [];
+          if (players.length === 0) {
+            error.insertError = 'Ekipa nima vnesenih igralcev! Dodaj igralce v ekipo!';
+            req.session.error = error;
+            return res.redirect('/trainings/new-training');
+          }
           players.forEach((item) => {
             presencePlayers.push([null, 0, Number.parseInt(training.insertId, 10),
               Number.parseInt(item.ID, 10)]);
