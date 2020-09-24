@@ -8,7 +8,7 @@ html
         include ../templates/navbar
         .contentWrapper
             h1= `Urejanje treninga ${training.title}`
-            form(action=`/trainings/editTraining/${training.ID}` method='post')
+            form(action=`/trainings/editTraining/${training.ID}` method='post' enctype='multipart/form-data')
                 input(type='text' name='title' value=`${training.title}`)
                 select(name='team' id='team')
                     each team in teams
@@ -30,6 +30,10 @@ html
                 textarea(name='intro' rows=10 columns=30)= `${training.intro}`
                 textarea(name='main' rows=10 columns=30)= `${training.main}`
                 textarea(name='end' rows=10 columns=30)= `${training.end}`
+                if training.attachment
+                    - var counter = 1
+                    each attachment in training.attachment
+                        a(href=`/uploads/${attachment}`)= `Priponka ${counter++} (${attachment})`
                 input(type='file' name='attachments' multiple)
                 input(type='submit' value='Shrani')
             if error

@@ -22,6 +22,6 @@ router.get('/edit-training/:id', trainingController.editTrainingForm);
 
 router.post('/addTraining', upload.array('attachments'), trainingController.addTraining);
 router.post('/deleteTraining/:id', trainingController.deleteTraining);
-router.post('/editTraining/:id', trainingController.editTraining);
+router.post('/editTraining/:id', upload.array('attachments'), trainingController.editTraining);
 
 module.exports = router;
