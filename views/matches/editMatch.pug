@@ -1,0 +1,37 @@
+html
+    head
+        include ../templates/header
+        title NK Malecnik
+    body
+    include ../templates/logoBar
+    .wrapper
+        include ../templates/navbar
+        .contentWrapper
+            h1 Nova tekma
+            form(action=`/matches/editMatch/${match.ID}` method='post')
+                select(name='type')
+                    option(value='Liga') Liga
+                    option(value='Pokal') Pokal
+                    option(value='Prijateljska') Prijateljska
+                    option(value='Turnir') Turnir
+                input(type='radio' value='0' name='locationType' id='home')
+                label(for='home') Doma
+                input(type='radio' value='1' name='locationType' id='away')
+                label(for='away') V gosteh
+                select(name='team')
+                    each team in teams
+                        if team.coachID == user.id
+                            option(value=`${team.ID}` selected)= team.name
+                input(type='number' name='homeGoals' min=0 value=0)
+                input(type='text' name='awayTeam' placeholder='Nasprotnik' required)
+                input(type='number' name='awayGoals' min=0 value=0)
+                input(type='date' name='matchDate' required)
+                input(type='time' name='matchStart' required)
+                input(type='time' name='assemblyTime' required)
+                select(name='locationHome')
+                    each location in locations
+                        option(value=`${location.ID}`)= location.name
+                input(type='text' name='locationAway')
+            if error
+                each err in error
+                    h4= err

@@ -3,4 +3,15 @@ html
         include ../templates/header
         title NK Malecnik
     body
-        h1 Tekme
+    include ../templates/logoBar
+    .wrapper
+        include ../templates/navbar
+        .contentWrapper
+            h1 Tekme
+            if matches
+                each match in matches
+                    a(href=`/matches/match/${match.matchID}`)= `${match.name} : ${match.opponent}` 
+            a(href='/matches/new-match/') Nova tekma
+            if error
+                each err in error
+                    h4= err

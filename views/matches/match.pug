@@ -1,0 +1,14 @@
+html
+    head
+        include ../templates/header
+        title NK Malecnik
+    body
+    include ../templates/logoBar
+    .wrapper
+        include ../templates/navbar
+        .contentWrapper
+            h1 Tekma
+            p= `${match.opponent}`
+            if error
+                each err in error
+                    h4= err
