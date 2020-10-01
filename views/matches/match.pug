@@ -9,6 +9,10 @@ html
         .contentWrapper
             h1 Tekma
             p= `${match.opponent}`
+            a(href=`/matches/edit-match/${match.matchID}`) Uredi tekmo
+            button#openMatchModal(type='button' class=`btn btn-primary ${firstAdd}` data-toggle='modal' data-target='#matchModal') Uredi prisotnost
+
+            include ../templates/presenceMatch
             if error
                 each err in error
                     h4= err
