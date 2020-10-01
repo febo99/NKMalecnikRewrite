@@ -27,9 +27,9 @@ html
                     else 
                         option(value='Turnir') Turnir
                 if match.venue == 'Doma'
-                    input(type='radio' value='0' name='locationType' id='home' checked)
+                    input(type='radio' value='Doma' name='locationType' id='home' checked)
                     label(for='home') Doma
-                    input(type='radio' value='1' name='locationType' id='away')
+                    input(type='radio' value='V gosteh' name='locationType' id='away')
                     label(for='away') V gosteh
                 else 
                     input(type='radio' value='0' name='locationType' id='home' )
@@ -56,6 +56,7 @@ html
                         else
                             option(value=`${location.ID}`)= location.name
                 input(type='text' name='locationAway' value= `${match.locationName}`)
+                input(type='submit' value='Shrani')
             if error
                 each err in error
                     h4= err

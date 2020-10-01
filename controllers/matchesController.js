@@ -77,7 +77,6 @@ module.exports = {
             req.session.error = `Napaka pri pridobivanju ekip! Koda napake: ${err3}`;
             return res.redirect(`/matches/match/${matchID}`);
           }
-          console.log(presence);
 
           res.render('./matches/match', {
             user: {
@@ -189,8 +188,10 @@ module.exports = {
       const newMatch = new Match(req.body.locationType, req.body.type, req.body.team,
         req.body.awayTeam, req.body.matchDate,
         req.body.assemblyTime, req.body.matchStart, req.body.locationHome,
-        req.body.locationAway, req.body.homeGoals, req.body.homeGoals,
+        req.body.locationAway, req.body.homeGoals, req.body.awayGoals,
         req.session.userID);
+
+      console.log(newMatch);
 
       // validation of input
       if (newMatch.homeGoals < 0 || newMatch.awayGoals < 0) {
@@ -217,25 +218,64 @@ module.exports = {
               Number(match.insertId),
               req.session.userID,
               Number(item.ID)]);
+          });
 
-            if (players.length === 0) {
-              error.insertError = 'Ekipa nima vnesenih igralcev! Dodaj igralce v ekipo!';
+          if (players.length === 0) {
+            error.insertError = 'Ekipa nima vnesenih igralcev! Dodaj igralce v ekipo!';
+            req.session.error = error;
+            return res.redirect('/matches/new-match');
+          }
+          res.locals.connection.query('INSERT INTO presenceMatches VALUES ?', [presencePlayers], (err2) => {
+            if (err2) {
+              error.insertError = `Napaka pri vstavljanju za prisotnost! Koda napake ${err2}`;
               req.session.error = error;
               return res.redirect('/matches/new-match');
             }
-            res.locals.connection.query('INSERT INTO presenceMatches VALUES ?', [presencePlayers], (err2) => {
-              if (err2) {
-                error.insertError = `Napaka pri vstavljanju za prisotnost! Koda napake ${err2}`;
-                req.session.error = error;
-                return res.redirect('/matches/new-match');
-              }
-              error.success = 'Tekma uspesno vstavljena';
-              req.session.error = error;
-              req.session.added = true;
-              return res.redirect(`/matches/match/${match.insertId}`);
-            });
+            error.success = 'Tekma uspesno vstavljena';
+            req.session.error = error;
+            req.session.added = true;
+            return res.redirect(`/matches/match/${match.insertId}`);
           });
         });
+      });
+    } else {
+      res.redirect('/');
+    }
+  },
+
+  editMatch: (req, res) => {
+    if (userLogged(req)) {
+      const error = {};
+      const matchID = Number(req.params.id);
+      const newMatch = new Match(req.body.locationType, req.body.type, req.body.team,
+        req.body.awayTeam, req.body.matchDate,
+        req.body.assemblyTime, req.body.matchStart, req.body.locationHome,
+        req.body.locationAway, req.body.homeGoals, req.body.awayGoals,
+        req.session.userID);
+
+      // validation of input
+      if (newMatch.homeGoals < 0 || newMatch.awayGoals < 0) {
+        error.negativeGoalsError = 'Stevilo golov ne sme biti manjse od 0!';
+        req.session.error = error;
+        return res.redirect(`/matches/match/${matchID}`);
+      }
+      const query = `UPDATE matches SET venue = ?, type = ?, teamID = ?,  opponent = ?, matchDate = ?, assembly = ?,
+      matchTime = ?, locationID = ?, locationName = ?, homeGoals = ?, opponentGoals = ? WHERE ID = ?`;
+
+      const editMatch = newMatch.parseInsert();
+      editMatch.splice(0, 1); // remove NULL id from array
+      editMatch[editMatch.length - 1] = matchID;
+      editMatch[5] = editMatch[5].slice(0, -3);
+      editMatch[6] = editMatch[6].slice(0, -3);
+
+      console.log(editMatch);
+
+      res.locals.connection.query(query, editMatch, (err, match) => {
+        if (err) {
+          error.insertError = `Napak pri urejanju tekme! Koda napake ${err}`;
+          return res.redirect(`/matches/match/${matchID}`);
+        }
+        return res.redirect(`/matches/match/${matchID}`);
       });
     } else {
       res.redirect('/');
