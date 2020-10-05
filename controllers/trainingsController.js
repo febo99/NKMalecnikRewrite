@@ -171,7 +171,6 @@ module.exports = {
   addTraining: (req, res) => {
     if (userLogged(req)) {
       const { startTime } = req.body;
-      console.log(req.files);
       const startTimeArray = startTime.split(':'); // split string to hours and minutes
       const duration = Number.parseInt(req.body.duration, 10);
       // set hours and minutes separately

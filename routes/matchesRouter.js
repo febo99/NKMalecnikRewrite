@@ -11,5 +11,6 @@ router.get('/edit-match/:id', matchesController.editMatchForm);
 
 router.post('/addMatch', matchesController.addMatch);
 router.post('/editMatch/:id', matchesController.editMatch);
+router.post('/deleteMatch/:id', matchesController.deleteMatch);
 
 module.exports = router;

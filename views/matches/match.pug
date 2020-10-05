@@ -11,7 +11,8 @@ html
             p= `${match.opponent}`
             a(href=`/matches/edit-match/${match.matchID}`) Uredi tekmo
             button#openMatchModal(type='button' class=`btn btn-primary ${firstAdd}` data-toggle='modal' data-target='#matchModal') Uredi prisotnost
-
+            form(action=`/matches/deleteMatch/${match.matchID}` method='post')
+                input(type='submit' value='Izbrisi')
             include ../templates/presenceMatch
             if error
                 each err in error

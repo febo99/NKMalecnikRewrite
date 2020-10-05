@@ -1,5 +1,4 @@
-import moment from 'moment';
-import { userLogged, isUserAdminOrHOYD } from '../utils/checkLogin';
+import { userLogged } from '../utils/checkLogin';
 import { htmlInputFormatDate } from '../utils/formatDate';
 import Match from '../models/matchModel';
 
@@ -191,8 +190,6 @@ module.exports = {
         req.body.locationAway, req.body.homeGoals, req.body.awayGoals,
         req.session.userID);
 
-      console.log(newMatch);
-
       // validation of input
       if (newMatch.homeGoals < 0 || newMatch.awayGoals < 0) {
         error.negativeGoalsError = 'Stevilo golov ne sme biti manjse od 0!';
@@ -268,9 +265,7 @@ module.exports = {
       editMatch[5] = editMatch[5].slice(0, -3);
       editMatch[6] = editMatch[6].slice(0, -3);
 
-      console.log(editMatch);
-
-      res.locals.connection.query(query, editMatch, (err, match) => {
+      res.locals.connection.query(query, editMatch, (err) => {
         if (err) {
           error.insertError = `Napak pri urejanju tekme! Koda napake ${err}`;
           return res.redirect(`/matches/match/${matchID}`);
@@ -280,5 +275,29 @@ module.exports = {
     } else {
       res.redirect('/');
     }
+  },
+
+  deleteMatch: (req, res) => {
+    if (userLogged(req)) {
+      const error = {};
+      const matchID = req.params.id;
+      res.locals.connection.query('DELETE FROM matches WHERE ID = ?', matchID, (err) => {
+        if (err) {
+          error.deleteError = `Napaka pri brisanju tekme! Koda napake: ${err}`;
+          req.session.error = error;
+          return res.redirect(`/matches/match/${matchID}`);
+        }
+        res.locals.connection.query('DELETE FROM presenceMatches WHERE matchID = ?', matchID, (err1) => {
+          if (err1) {
+            error.deleteError = `Napaka pri brisanju tekme! Koda napake: ${err1}`;
+            req.session.error = error;
+            return res.redirect(`/matches/match/${matchID}`);
+          }
+          error.successDelete = 'Tekma uspesno izbrisana!';
+          req.session.error = error;
+          return res.redirect('/matches');
+        });
+      });
+    } else { res.redirect('/'); }
   },
 };
