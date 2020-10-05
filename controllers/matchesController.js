@@ -1,3 +1,4 @@
+import moment from 'moment';
 import { userLogged } from '../utils/checkLogin';
 import { htmlInputFormatDate } from '../utils/formatDate';
 import Match from '../models/matchModel';
@@ -197,6 +198,15 @@ module.exports = {
         return res.redirect('/matches/new-match');
       }
 
+      const assembly = moment(newMatch.assembly, 'HH:mm');
+      const matchTime = moment(newMatch.matchTime, 'HH:mm');
+
+      if (matchTime.isBefore(assembly)) {
+        error.timeError = 'Ura zbora mora biti pred zacetkom tekme!';
+        req.session.error = error;
+        return res.redirect('/matches/new-match');
+      }
+
       res.locals.connection.query('INSERT INTO matches VALUES ?', [[newMatch.parseInsert()]], (err, match) => {
         if (err) {
           error.insertError = `Napak pri vstavljanju tekme! Koda napake ${err}`;
@@ -256,6 +266,16 @@ module.exports = {
         req.session.error = error;
         return res.redirect(`/matches/match/${matchID}`);
       }
+
+      const assembly = moment(newMatch.assembly, 'HH:mm');
+      const matchTime = moment(newMatch.matchTime, 'HH:mm');
+
+      if (matchTime.isBefore(assembly)) {
+        error.timeError = 'Ura zbora mora biti pred zacetkom tekme!';
+        req.session.error = error;
+        return res.redirect(`/matches/match/${matchID}`);
+      }
+
       const query = `UPDATE matches SET venue = ?, type = ?, teamID = ?,  opponent = ?, matchDate = ?, assembly = ?,
       matchTime = ?, locationID = ?, locationName = ?, homeGoals = ?, opponentGoals = ? WHERE ID = ?`;
 

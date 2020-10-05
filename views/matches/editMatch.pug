@@ -38,11 +38,10 @@ html
                     label(for='away') V gosteh 
                 select(name='team')
                     each team in teams
-                        if team.coachID == user.id
-                            if match.created = team.coachID
-                                option(value=`${team.ID}` selected)= team.name
-                            else
-                                option(value=`${team.ID}`)= team.name
+                        if match.teamID == team.ID
+                            option(value=`${team.ID}` selected)= team.name
+                        else
+                            option(value=`${team.ID}`)= team.name
                 input(type='number' name='homeGoals' min=0 value= match.homeGoals)
                 input(type='text' name='awayTeam' placeholder='Nasprotnik' required value= match.opponent)
                 input(type='number' name='awayGoals' min=0 value= match.opponentGoals)
