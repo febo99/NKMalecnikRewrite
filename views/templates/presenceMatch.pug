@@ -1,4 +1,4 @@
-div.modal.fade#trainingModal(tabindex='-1' role='dialog' aria-labelledby='trainingModal' aria-hidden='true')
+div.modal.fade#matchModal(tabindex='-1' role='dialog' aria-labelledby='matchModal' aria-hidden='true')
     div.modal-dialog(role='document')
         .modal-content
             .modal-header
@@ -12,7 +12,7 @@ div.modal.fade#trainingModal(tabindex='-1' role='dialog' aria-labelledby='traini
                             .player
                                 h4= p.name
                             .presence-picker
-                                form(method='post', action=`/presence/setTrainingPresence/${p.presenceID}`)
+                                form(method='post', action=`/presence/setMatchPresence/${p.presenceID}`)
                                     if p.presence == 0
                                         input(type='radio' id='present' name='presence' value='0' checked)
                                     else 
@@ -28,6 +28,10 @@ div.modal.fade#trainingModal(tabindex='-1' role='dialog' aria-labelledby='traini
                                     else
                                         input(type='radio' id='missing' name='presence' value='0')
                                     label(for='present') Neopravicen
+                                    input(type='number' name='minutes' min=0 max=120 value= p.minutes required)
+                                    input(type='number' name='goals' min=0 value= p.goals required)
+                                    input(type='number' name='assists' min=0 value= p.asissts required)
+                                    input(type='text' name='cards' value= p.cards)
             .modal-footer
                 button.btn.btn-secondary(type='button', data-dismiss='modal') Zapri
                 button.btn.btn-primary(type='button') Shrani
