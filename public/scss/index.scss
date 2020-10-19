@@ -38,12 +38,7 @@ a,input{
     flex-direction: column;
 }
 
-.full-width{
-    width: 100%;
+textarea{
+    display: block;
 }
-
-.logoBar{
-    background-color: darkslateblue;
-}
-
 @import '_mediaQueries.scss';

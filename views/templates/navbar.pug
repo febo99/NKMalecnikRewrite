@@ -6,17 +6,26 @@ nav.navbar.navbar-light.bg-light.customNav
             li
                 a.nav-item(href='/users/logout') Odjava
             li
-                a.nav-item(href='/players/my-players') Moji igralci
-            li
-                a.nav-item(href='/players') Vsi igralci
+                a.nav-item.dropdown-toggle#navbarDropdown( role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false') Igralci
+                .dropdown-menu(aria-labelledby='navbarDropdown')
+                    a.dropdown-item(href='/players') Vsi igralci
+                    a.dropdown-item(href='/players/my-players') Moji igralci
+                    a.dropdown-item(href='/players/new-player') Dodaj igralca
             li
                 a.nav-item(href='/teams') Ekipe
             li
                 a.nav-item(href='/calendar') Koledar
             li
-                a.nav-item(href='/trainings') Treningi
+                a.nav-item.dropdown-toggle#navbarDropdown( role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false') Treningi
+                .dropdown-menu(aria-labelledby='navbarDropdown')
+                    a.dropdown-item(href='/trainings') Seznam treningov
+                    a.dropdown-item(href='/trainings/new-training') Dodaj trening
             li
-                a.nav-item(href='/matches') Tekme
+                a.nav-item.dropdown-toggle#navbarDropdown( role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false') Tekme
+                .dropdown-menu(aria-labelledby='navbarDropdown')
+                    a.dropdown-item(href='/matches') Seznam tekem
+                    a.dropdown-item(href='/matches/my-matches') Moje tekme
+                    a.dropdown-item(href='/matches/new-match') Dodaj tekmo
             li
                 a.nav-item(href='/presence-report') Porocilo prisotnosti
             li
@@ -33,3 +42,4 @@ nav.navbar.navbar-light.bg-light.customNav
                 .dropdown-menu(aria-labelledby='navbarDropdown')
                     a.dropdown-item(href='/admin') Gesla
                     a.dropdown-item(href='/admin/pin-requests') Pripete objave
+                    a.dropdown-item(href='/admin/travel-expenses') Potni stroski
