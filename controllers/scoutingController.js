@@ -68,4 +68,20 @@ module.exports = {
       res.redirect('/');
     }
   },
+
+  deletePlayer: (req, res) => {
+    if (userLogged(req)) {
+      const playerID = req.params.id;
+      res.locals.connection.query('DELETE FROM scouting WHERE ID = ? ', playerID, (err) => {
+        if (err) {
+          req.session.error = err;
+          return res.redirect('/scouting');
+        }
+        req.session.error = 'Uspesno zbrisan igralec!';
+        return res.redirect('/scouting');
+      });
+    } else {
+      return res.redirect('/');
+    }
+  },
 };
