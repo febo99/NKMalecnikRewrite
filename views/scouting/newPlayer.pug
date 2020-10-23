@@ -1,0 +1,20 @@
+html
+    head
+        include ../templates/header
+        title NK Malecnik
+    body
+    include ../templates/logoBar
+    .wrapper
+        include ../templates/navbar
+        .contentWrapper
+            h1 Dodaj igralca
+            form(action='/scouting/addPlayer', method='post')
+                input(type='text' name='name' id='name' value='test')
+                input(type='text' name='surname' id='surname' value='test')
+                input(type='text' name='club' id='club' value='NK Test')
+                input(type='text' name='foot' id='foot' value='desnicar')
+                input(type='number' min=1900 max=2099 step=1 value=2020 name='year' id='year')
+                textarea(name='description' id='description')
+                input(type='submit' value='Dodaj') 
+            if error
+                h4= error
