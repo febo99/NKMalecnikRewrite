@@ -1,0 +1,13 @@
+html
+    head
+        include ../templates/header
+        title NK Malecnik
+    body
+    include ../templates/logoBar
+    .wrapper
+        include ../templates/navbar
+        .contentWrapper
+            h1= `Predloga ${template.title}`
+                h4= template.intro
+                h4= template.main
+                h4= template.end
