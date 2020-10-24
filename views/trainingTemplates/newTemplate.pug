@@ -1,0 +1,18 @@
+html
+    head
+        include ../templates/header
+        title NK Malecnik
+    body
+    include ../templates/logoBar
+    .wrapper
+        include ../templates/navbar
+        .contentWrapper
+            h1 Dodaj predlogo
+            form(action='/trainingTemplates/newTemplate', method='post')
+                input(type='text' name='title' id='title' value='Title')
+                input(type='text' name='intro' id='intro' value='Intro')
+                input(type='text' name='main' id='main' value='Main')
+                input(type='text' name='end' id='end' value='End')
+                input(type='submit' value='Dodaj') 
+            if error
+                h4= error
