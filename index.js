@@ -69,7 +69,7 @@ app.use('/players', playersRouter);
 app.use('/teams', teamsRouter);
 app.use('/settings', settingsRouter);
 app.use('/matches', matchesRouter);
-app.use('/presence-report', presenceRouter);
+app.use('/presence', presenceRouter);
 app.use('/payroll', payrollRouter);
 app.use('/trainings', trainingsRouter);
 app.use('/trainingTemplates', trainingTemplatesRouter);

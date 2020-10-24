@@ -7,27 +7,29 @@ div.modal.fade#trainingModal(tabindex='-1' role='dialog' aria-labelledby='traini
                     span(aria-hidden='true') &times;
             .modal-body
                 .presenceContainer
-                    each p in presence
-                        .presence
-                            .player
-                                h4= p.name
-                            .presence-picker
-                                form(method='post', action=`/presence/setTrainingPresence/${p.presenceID}`)
-                                    if p.presence == 0
-                                        input(type='radio' id='present' name='presence' value='0' checked)
-                                    else 
-                                        input(type='radio' id='present' name='presence' value='0')
-                                    label(for='present') Prisoten
-                                    if p.presence == 1
-                                        input(type='radio' id='excused' name='presence' value='1' checked)
-                                    else 
-                                        input(type='radio' id='excused' name='presence' value='1')
-                                    label(for='present') Opravicen
-                                    if p.presence == 2
-                                        input(type='radio' id='missing' name='presence' value='0' checked)
-                                    else
-                                        input(type='radio' id='missing' name='presence' value='0')
-                                    label(for='present') Neopravicen
+                    form(method='post', action=`/presence/setTrainingPresence/${training.ID}`)
+                        each p in presence
+                            .presence
+                                .player
+                                    h4= p.name
+                                .presence-picker
+                                        if p.presence == 0
+                                            input(type='radio' id='present' name=`presence${p.playerID}` value='0' checked)
+                                        else 
+                                            input(type='radio' id='present' name=`presence${p.playerID}` value='0')
+                                        label(for='present') Prisoten
+                                        if p.presence == 1
+                                            input(type='radio' id='excused' name=`presence${p.playerID}` value='1' checked)
+                                        else 
+                                            input(type='radio' id='excused' name=`presence${p.playerID}` value='1')
+                                        label(for='present') Opravicen
+                                        if p.presence == 2
+                                            input(type='radio' id='missing' name=`presence${p.playerID}` value='0' checked)
+                                        else
+                                            input(type='radio' id='missing' name=`presence${p.playerID}` value='0')
+                                        label(for='present') Neopravicen
+                                        
+                        input.btn.btn-primary(type='submit' value='Shrani') 
             .modal-footer
                 button.btn.btn-secondary(type='button', data-dismiss='modal') Zapri
-                button.btn.btn-primary(type='button') Shrani
+                
