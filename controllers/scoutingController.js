@@ -54,7 +54,6 @@ module.exports = {
         desc: req.body.description,
         created: req.session.userID,
       };
-      console.log(Object.values(player));
       res.locals.connection.query('INSERT INTO scouting VALUES ?', [[Object.values(player)]], (err) => {
         if (err) {
           req.session.error = err;
