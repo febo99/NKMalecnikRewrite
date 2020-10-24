@@ -22,12 +22,12 @@ div.modal.fade#trainingModal(tabindex='-1' role='dialog' aria-labelledby='traini
                                             input(type='radio' id='excused' name=`presence${p.playerID}` value='1' checked)
                                         else 
                                             input(type='radio' id='excused' name=`presence${p.playerID}` value='1')
-                                        label(for='present') Opravicen
+                                        label(for='excused') Opravicen
                                         if p.presence == 2
                                             input(type='radio' id='missing' name=`presence${p.playerID}` value='2' checked)
                                         else
                                             input(type='radio' id='missing' name=`presence${p.playerID}` value='2')
-                                        label(for='present') Neopravicen
+                                        label(for='missing') Neopravicen
                                         
                         input.btn.btn-primary(type='submit' value='Shrani') 
             .modal-footer
