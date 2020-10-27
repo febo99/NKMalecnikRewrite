@@ -64,4 +64,33 @@ a,input{
     border: none;
 }
 
+.logoBar{
+   background-color:#303f9f;
+}
+
+.dropdown-menu{
+    padding:0;
+    margin:0;
+    border:0;
+}
+
+.dropdown-item{
+    font-size:85%;
+    font-weight:normal;
+}
+
+.customNav{
+    margin-right:0.5%;
+    width:15%;
+    background-color:$base-color;
+    height:100%
+}
+
+.navbarhr{
+    width:75%;
+    height:1px;
+    color:white;
+    margin:0;
+    border:none;
+}
 @import '_mediaQueries.scss';
