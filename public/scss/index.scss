@@ -41,4 +41,12 @@ a,input{
 textarea{
     display: block;
 }
+
+.newPlayerForm{
+    width:150%;
+}
+
+.formButton{
+    width:100%;
+}
 @import '_mediaQueries.scss';
