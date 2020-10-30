@@ -7,6 +7,7 @@ html
         .wrapper
             include ../templates/navbar
             .contentWrapper
+<<<<<<< Updated upstream
                 .container
                     form(action='/teams/addTeam', method='post')
                         .form-group
@@ -36,3 +37,31 @@ html
                 if error
                     each e in error
                         h4= e
+=======
+                .container.newTeamForm
+                    h1 Nova ekipa
+                    form(action='/teams/addTeam', method='post')
+                        div(class='form-group')
+                            label(for='name') Ime ekipe:
+                            input(class='form-control' type='text' name='name' id='name' placeholder='Vnesi ime ekipe.') 
+                        div(class='form-group')
+                            label(for='coach') Trener:
+                            select(class='form-control' name='coach' id='coach')
+                                each user in users
+                                    option(value= user.ID)= user.name
+                        div(class='form-group')
+                            label(for='assistant') Pomočnik 1:
+                            select(class='form-control' name='assistant' id='assistant')
+                                each user in users
+                                    option(value= user.ID)= user.name
+                        div(class='form-group')
+                            label(for='technical') Pomočnik 2:
+                            select(class='form-control' name='technical' id='technical')
+                                each user in users
+                                    option(value= user.ID)= user.name
+                        div(class='form-group')
+                            input(class='btn btn-primary formButton' type='submit' value='Dodaj') 
+                    if error
+                        each e in error
+                            h4= e
+>>>>>>> Stashed changes
