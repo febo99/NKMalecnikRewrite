@@ -7,26 +7,50 @@ html
     .wrapper
         include ../templates/navbar
         .contentWrapper
-            h1 Nov trening
-            form(action='/trainings/addTraining' method='post' enctype='multipart/form-data')
-                input(type='text' name='title')
-                select(name='team' id='team')
-                    each team in teams
-                        if team.coachID == user.id
-                            option(value=`${team.ID}` selected)= team.name
-                input(type='date' name='date')
-                input(type='time' name='startTime')
-                input(type='number' name='duration' min=0 )
-                select(name='location')
-                    each location in locations 
-                        option(value=`${location.ID}`)= location.name
-                //- TO DO TEMPLATES
-                textarea(name='report' rows=10 columns=30)
-                textarea(name='intro' rows=10 columns=30)
-                textarea(name='main' rows=10 columns=30)
-                textarea(name='end' rows=10 columns=30)
-                input(type='file' name='attachments' accept='.jpg, .jpeg, .pdf, .png, .svg, .gif' multiple)
-                input(type='submit' value='Dodaj')
-            if error
-                each err in error 
-                    h4= err
+            .containter.newTrainingForm
+                h1 Nov trening
+                form(action='/trainings/addTraining' method='post' enctype='multipart/form-data')
+                    div(class='form-group')
+                        label(for='title') Naziv:
+                        input(class='form-control' type='text' name='title' id='title' placeholder='Vnesite naziv dejavnosti.')
+                    div(class='form-group')
+                        label(for='team') Selekcija:
+                        select(class='form-control' name='team' id='team')
+                            each team in teams
+                                if team.coachID == user.id
+                                    option(value=`${team.ID}` selected)= team.name
+                    div(class='form-group')
+                        label(for='date') Datum:
+                        input(class='form-control' type='date' name='date' id='date')
+                    div(class='form-group')
+                        label(for='time') Čas:
+                        input(class='form-control' type='time' name='startTime' id='startTime')
+                    div(class='form-group')
+                        label(for='duration') Čas trajanja (min):
+                        input(class='form-control' type='number' name='duration' id='duration' min=0 placeholder='Vnesite čas trajanja (min).')
+                    div(class='form-group')
+                        label(for='location') Lokacija:
+                        select(class='form-control' name='location' id='location')
+                        each location in locations 
+                            option(value=`${location.ID}`)=location.name
+                    //- TO DO TEMPLATES
+                    div(class='form-group')
+                        label(for='report') Poročilo:
+                        textarea(class='form-control' name='report' rows=10 columns=30 placeholder='Vnesite kratko poročilo treninga.')
+                    div(class='form-group')
+                        label(for='intro') Uvodni del:
+                        textarea(class='form-control' name='intro' rows=10 columns=30 placeholder='Vnesite dejavnosti, izvedene v uvodnem delu.')
+                    div(class='form-group')
+                        label(for='main') Glavni del:
+                        textarea(class='form-control' name='main' rows=10 columns=30 placeholder='Vnesite dejavnosti, izvedene v glavnem delu.')
+                    div(class='form-group')
+                        label(for='end') Zaključni del:
+                        textarea(class='form-control' name='end' rows=10 columns=30 placeholder='Vnesite dejavnosti, izvedene v zaključnem delu.')
+                    div(class='form-group')
+                        input(type='file' name='attachments' accept='.jpg, .jpeg, .pdf, .png, .svg, .gif' multiple)
+                        small(id='attachmentsHelp' class='form-text text-muted') Če želite, lahko pripnete še fotografije iz treninga.
+                    div(class='form-group')
+                        input(class='btn btn-primary formButton' type='submit' value='Dodaj trening')
+                if error
+                    each err in error 
+                        h4= err
