@@ -3,11 +3,21 @@ html
         include ../templates/header
         title NK Malecnik
     body
-        h1 Users
-        form(action='/settings/addLocation', method='post')
-            input(type='text' name='name' id='name' value='test') 
-            input(type='text' name='color' id='color' value='test')
-            input(type='submit' value='Dodaj')
-        if error
-            each e in error
-                h4= e
+    include ../templates/logoBar
+    .wrapper
+        //-include ../templates/navbar
+        .contentWrapper
+            .container.ml-1.mt-1
+                h1 Dodaj lokacijo
+                form(action='/settings/addLocation', method='post')
+                    .form-group
+                        label(for='name') Ime:
+                        input(class='form-control' type='text' name='name' id='name' placeholder='Vnesite ime lokacije.') 
+                    .form-group
+                        label(for='color') Barva:
+                        input(class='form-control' type='color' name='color' id='color')
+                    .form-group
+                        input(class='btn btn-primary formButton' type='submit' value='Dodaj')
+                if error
+                    each e in error
+                        h4= e
