@@ -1,3 +1,5 @@
+const e = require('express');
+
 const updatePostCharCounter = () => {
   const charLength = document.querySelector('#post').value.length;
   document.querySelector('#charCounter').innerHTML = `${charLength}/250`;

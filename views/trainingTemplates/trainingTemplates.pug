@@ -1,0 +1,14 @@
+html
+    head
+        include ../templates/header
+        title NK Malecnik
+    body
+    include ../templates/logoBar
+    .wrapper
+        include ../templates/navbar
+        .contentWrapper
+            h1 Predloge treningov
+            if templates
+                each template in templates
+                    a(href=`/trainingTemplates/${template.ID}`)= template.title
+            a(href='/trainingTemplates/new-template') Dodaj

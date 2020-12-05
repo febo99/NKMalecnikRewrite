@@ -13,6 +13,7 @@ import userRouter from './routes/userRouter';
 import dashboardRouter from './routes/dashboardRouter';
 import playersRouter from './routes/playersRouter';
 import teamsRouter from './routes/teamsRouter';
+import trainingTemplatesRouter from './routes/trainingTemplatesRouter';
 import settingsRouter from './routes/settingsRouter';
 import matchesRouter from './routes/matchesRouter';
 import payrollRouter from './routes/payrollRouter';
@@ -33,6 +34,7 @@ app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, 'views'));
 
 app.use(express.static(`${__dirname}/public`));
+app.use(express.static(`${__dirname}/uploads`));
 
 app.use(morgan('combined', { stream: logger }));
 
@@ -70,6 +72,7 @@ app.use('/matches', matchesRouter);
 app.use('/presence-report', presenceRouter);
 app.use('/payroll', payrollRouter);
 app.use('/trainings', trainingsRouter);
+app.use('/trainingTemplates', trainingTemplatesRouter);
 app.use('/calendar', calendarRouter);
 app.use('/scouting', scoutingRouter);
 app.use('/admin', adminRouter);
