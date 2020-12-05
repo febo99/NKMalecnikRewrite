@@ -1,0 +1,37 @@
+div.modal.fade#matchModal(tabindex='-1' role='dialog' aria-labelledby='matchModal' aria-hidden='true')
+    div.modal-dialog(role='document')
+        .modal-content
+            .modal-header
+                h5.modal-title Prisotnost
+                button.close(type='button' data-dismiss="modal" aria-label="Close")
+                    span(aria-hidden='true') &times;
+            .modal-body
+                .presenceContainer
+                    each p in presence
+                        .presence
+                            .player
+                                h4= p.name
+                            .presence-picker
+                                form(method='post', action=`/presence/setMatchPresence/${p.presenceID}`)
+                                    if p.presence == 0
+                                        input(type='radio' id='present' name='presence' value='0' checked)
+                                    else 
+                                        input(type='radio' id='present' name='presence' value='0')
+                                    label(for='present') Prisoten
+                                    if p.presence == 1
+                                        input(type='radio' id='excused' name='presence' value='1' checked)
+                                    else 
+                                        input(type='radio' id='excused' name='presence' value='1')
+                                    label(for='present') Opravicen
+                                    if p.presence == 2
+                                        input(type='radio' id='missing' name='presence' value='0' checked)
+                                    else
+                                        input(type='radio' id='missing' name='presence' value='0')
+                                    label(for='present') Neopravicen
+                                    input(type='number' name='minutes' min=0 max=120 value= p.minutes required)
+                                    input(type='number' name='goals' min=0 value= p.goals required)
+                                    input(type='number' name='assists' min=0 value= p.asissts required)
+                                    input(type='text' name='cards' value= p.cards)
+            .modal-footer
+                button.btn.btn-secondary(type='button', data-dismiss='modal') Zapri
+                button.btn.btn-primary(type='button') Shrani

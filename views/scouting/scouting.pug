@@ -3,4 +3,13 @@ html
         include ../templates/header
         title NK Malecnik
     body
-        h1 Skavting
+    include ../templates/logoBar
+    .wrapper
+        include ../templates/navbar
+        .contentWrapper
+            h1 Scouting
+            if scoutedPlayers
+                each player in scoutedPlayers
+                    h5= `${player.name} ${player.surname}`
+                    a(href=`/scouting/deletePlayer/${player.ID}`) Izbrisi
+            a(href='/scouting/new-player') Dodaj

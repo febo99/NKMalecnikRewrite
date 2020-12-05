@@ -1,0 +1,40 @@
+html
+    head
+        include ../templates/header
+        title NK Malecnik
+    body
+    include ../templates/logoBar
+    .wrapper
+        include ../templates/navbar
+        .contentWrapper
+            .container.ml-1.mt-1
+                h1 Dodaj igralca
+                form(action='/scouting/addPlayer', method='post')
+                    .form-group
+                        label(for='name') Ime:
+                        input(class='form-control' type='text' name='name' id='name' placeholder='Vnesite ime igralca.')
+                    .form-group
+                        label(for='surname') Priimek:
+                        input(class='form-control' type='text' name='surname' id='surname' placeholder='Vnesite priimek igralca.')
+                    .form-group
+                        label(for='club')
+                        input(class='form-control' type='text' name='club' id='club' placeholder='Vnesite ime kluba.')
+                    .form-group
+                        label(for='foot') Boljša noga:
+                        br
+                        div(class='form-check form-check-inline')
+                            input(class='form-check-input' type='checkbox' id='desna' name='desna' value='desna')
+                            label(class='form-check-label' for='desna') Desna
+                        div(class='form-check form-check-inline')
+                            input(class='form-check-input' type='checkbox' id='leva' name='leva' value='leva')
+                            label(class='form-check-label' for='desna') Leva
+                    .form-group
+                        label(for='year') Leto rojstva:
+                        input(class='form-control' type='number' min=1900 max=2099 step=1 value=2020 name='year' id='year')
+                    .form-group
+                        label(for='description') Opis:
+                        textarea(class='form-control' name='description' id='description' rows=5 placeholder='Opis igralca.')
+                    .form-group
+                        input(class='btn btn-primary formButton' type='submit' value='Dodaj') 
+                if error
+                    h4= error

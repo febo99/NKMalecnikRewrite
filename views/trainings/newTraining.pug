@@ -1,0 +1,32 @@
+html
+    head
+        include ../templates/header
+        title NK Malecnik
+    body
+    include ../templates/logoBar
+    .wrapper
+        include ../templates/navbar
+        .contentWrapper
+            h1 Nov trening
+            form(action='/trainings/addTraining' method='post' enctype='multipart/form-data')
+                input(type='text' name='title')
+                select(name='team' id='team')
+                    each team in teams
+                        if team.coachID == user.id
+                            option(value=`${team.ID}` selected)= team.name
+                input(type='date' name='date')
+                input(type='time' name='startTime')
+                input(type='number' name='duration' min=0 )
+                select(name='location')
+                    each location in locations 
+                        option(value=`${location.ID}`)= location.name
+                //- TO DO TEMPLATES
+                textarea(name='report' rows=10 columns=30)
+                textarea(name='intro' rows=10 columns=30)
+                textarea(name='main' rows=10 columns=30)
+                textarea(name='end' rows=10 columns=30)
+                input(type='file' name='attachments' accept='.jpg, .jpeg, .pdf, .png, .svg, .gif' multiple)
+                input(type='submit' value='Dodaj')
+            if error
+                each err in error 
+                    h4= err

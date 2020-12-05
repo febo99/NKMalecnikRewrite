@@ -1,0 +1,39 @@
+html
+    head
+        include ../templates/header
+        title NK Malecnik
+    body
+    include ../templates/logoBar
+    .wrapper
+        include ../templates/navbar
+        .contentWrapper
+            h1 Potni nalogi
+                form(action='/admin/generateTravelExpenses', method='post')
+                    select(name='coach')
+                        each coach in coaches
+                            option(value= coach.ID)= `${coach.name} ${coach.surname}`
+                    br
+                    select(name='year')
+                        option(value='2019') 2019
+                        option(value='2020' selected) 2020
+                    select(name='month' id='month')
+                        option(value='1') Januar
+                        option(value='2') Februar
+                        option(value='3') Marec
+                        option(value='4') April
+                        option(value='5') Maj
+                        option(value='6') Junij
+                        option(value='7') Julij
+                        option(value='8') Avgust
+                        option(value='9') September
+                        option(value='10') Oktober
+                        option(value='11') November
+                        option(value='12') December
+                    br
+                    input(type='number' name='km' value=0 placeholder='Razdalja' min=1)
+                    br
+                    input(type='number' name='eur' value=0 min=0 step='.01')
+                    br
+                    input(type='submit' value='Generiraj')
+            if error
+                h4= error

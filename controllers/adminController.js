@@ -1,4 +1,26 @@
 import bcrypt from 'bcrypt';
+import xl from 'excel4node';
+import { userLogged } from '../utils/checkLogin';
+
+const getMonthName = (n) => {
+  switch (n) {
+    case 1: return 'Januar';
+    case 2: return 'Februar';
+    case 3: return 'Marec';
+    case 4: return 'April';
+    case 5: return 'Maj';
+    case 6: return 'Junij';
+    case 7: return 'Julij';
+    case 8: return 'Avgust';
+    case 9: return 'September';
+    case 10: return 'Oktober';
+    case 11: return 'November';
+    case 12: return 'December';
+    default: return null;
+  }
+};
+
+const numberOfDays = (y, m) => new Date(y, m, 0).getDate();
 
 module.exports = {
   getPage: (req, res) => {
@@ -27,6 +49,115 @@ module.exports = {
       });
     }
     return res.redirect('/');
+  },
+
+  travelExpenesesPage: (req, res) => {
+    if (userLogged(req)) {
+      const { error } = req.session;
+      req.session.error = null;
+      res.locals.connection.query('SELECT * FROM users', (err, coaches) => {
+        if (err) {
+          return res.render('admin/generateExcel', {
+            error,
+            user: {
+              email: req.session.email,
+              role: req.session.role,
+              id: req.session.userID,
+              name: req.session.name,
+              surname: req.session.surname,
+            },
+          });
+        }
+        return res.render('admin/generateExcel', {
+          coaches,
+          error,
+          user: {
+            email: req.session.email,
+            role: req.session.role,
+            id: req.session.userID,
+            name: req.session.name,
+            surname: req.session.surname,
+          },
+        });
+      });
+    } else {
+      return res.redirect('/');
+    }
+  },
+
+  generateTrainingExpenes: (req, res) => {
+    const queryTrainings = `SELECT * FROM trainings
+    INNER JOIN locations ON trainings.locationID = locations.ID
+    WHERE created = ? and MONTH(dateOfTraining) = ? and YEAR(dateOfTraining) = ?`;
+
+    const queryMatches = `SELECT * FROM matches
+    WHERE created = ? and MONTH(matchDate) = ? and YEAR(matchDate) = ?`;
+    res.locals.connection.query(queryTrainings,
+      [req.body.coach,
+        req.body.month,
+        req.body.year],
+      (err, trainings) => {
+        res.locals.connection.query(queryMatches,
+          [req.body.coach,
+            req.body.month,
+            req.body.year], (err1, matches) => {
+            res.locals.connection.query('SELECT * FROM users WHERE ID = ?', req.body.coach, (err2, coachGet) => {
+              const monthName = getMonthName(Number(req.body.month));
+              const nrDays = numberOfDays(req.body.year, req.body.month);
+              const coach = coachGet[0];
+
+              const wb = new xl.Workbook();
+              const page = wb.addWorksheet();
+
+              // Merge cells for header
+              page.cell(1, 1, 1, 4, true).string(`Potni nalog - ${monthName} ${req.body.year}`);
+              page.cell(1, 6, 1, 10, true).string(`${coach.ime} ${coach.priimek}`);
+
+              // Merge cells for activites
+              page.cell(2, 2, 2, 3, true).string('Treningi');
+              page.cell(2, 4, 2, 5, true).string('Tekme');
+              page.cell(2, 6, 2, 7, true).string('Sestanki');
+              page.cell(2, 8, 2, 9, true).string('Ogledi tekem');
+              page.cell(2, 10, 2, 11, true).string('Ostalo');
+              page.cell(2, 12).string('Skupaj');
+
+              for (let i = 2; i <= 11; i += 1) {
+                page.cell(3, i).string(i % 2 === 0 ? 'Kraj' : 'km');
+              }
+
+              let kmSum;
+
+              for (let i = 1; i <= nrDays; i += 1) {
+                const cellRow = 4 + (i - 1);
+                page.cell(cellRow, 1).string(i.toString());
+                if (i === nrDays) {
+                  page.cell(cellRow + 1, 1).string('Skupaj');
+                  page.cell(cellRow + 1, 12).formula(`SUM(L4:L${cellRow})`);
+                  kmSum = cellRow + 1;
+                }
+
+                page.cell(cellRow, 12).formula(`C${cellRow} + E${cellRow} + G${cellRow} + I${cellRow} + K${cellRow} `);
+              }
+
+              trainings.forEach((item) => {
+                const trainingIndex = 4 + (new Date(item.datum).getDate() - 1);
+                page.cell(trainingIndex, 2).string(item.ime);
+                page.cell(trainingIndex, 3).string(req.body.km);
+              });
+
+              matches.forEach((item) => {
+                const matchIndex = 4 + (new Date(item.datum).getDate() - 1);
+                page.cell(matchIndex, 4).string(item.imeLokacije);
+              });
+
+              page.cell(38, 4).string('eur/km');
+              page.cell(38, 5).number(Number(req.body.eur));
+              page.cell(38, 6).formula(`L${kmSum} * E38`);
+
+              return wb.write(`Potni_nalog-${coach.name}_${coach.surname}-${monthName}-${req.body.year}`, res);
+            });
+          });
+      });
   },
 
   getPinRequests: (req, res) => {

@@ -3,33 +3,64 @@ nav.navbar.navbar-light.bg-light.customNav
         ul.navbar-nav
             li
                 a.nav-item(href='/dashboard') Domača stran
+            hr.navbarhr
             li
+                a.nav-item.dropdown-toggle#navbarDropdown( role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false') Igralci
+                .dropdown-menu(aria-labelledby='navbarDropdown')
+                    a.dropdown-item(href='/players') &nbsp&nbsp&nbspVsi igralci
+                    a.dropdown-item(href='/players/my-players') &nbsp&nbsp&nbspMoji igralci
+                    a.dropdown-item(href='/players/new-player') &nbsp&nbsp&nbspDodaj igralca
+            li
+               a.nav-item.dropdown-toggle#navbarDropdown( role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false') Ekipe
+                .dropdown-menu(aria-labelledby='navbarDropdown')
+                    a.dropdown-item(href='/teams/newTeam') &nbsp&nbsp&nbspNova ekipa
+                    a.dropdown-item(href='/teams/editTeam') &nbsp&nbsp&nbspUredi ekipo
+                    a.dropdown-item(href='/teams/teams') &nbsp&nbsp&nbspVse ekipe
+                    a.dropdown-item(href='/teams/team') &nbsp&nbsp&nbspMoje ekipe
+                    a.dropdown-item(href='/teams/movePlayers') &nbsp&nbsp&nbspPrestavi igralce
+
                 a.nav-item(href='/users/logout') Odjava
+
             li
-                a.nav-item(href='/players/my-players') Moji igralci
-            li
-                a.nav-item(href='/players') Vsi igralci
-            li
-                a.nav-item(href='/teams') Ekipe
+                a.nav-item(href='#') Obvestila 
+            hr.navbarhr
             li
                 a.nav-item(href='/calendar') Koledar
             li
-                a.nav-item(href='/trainings') Treningi
+
+                a.nav-item.dropdown-toggle#navbarDropdown( role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false') Treningi
+                .dropdown-menu(aria-labelledby='navbarDropdown')
+                    a.dropdown-item(href='/trainings') Seznam treningov
+                    a.dropdown-item(href='/trainings/new-training') Dodaj trening
+                    a.dropdown-item(href='/trainingTemplates') Predloge treningov
             li
-                a.nav-item(href='/matches') Tekme
+                a.nav-item.dropdown-toggle#navbarDropdown( role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false') Tekme
+                .dropdown-menu(aria-labelledby='navbarDropdown')
+                    a.dropdown-item(href='/matches') Seznam tekem
+                    a.dropdown-item(href='/matches/my-matches') Moje tekme
+                    a.dropdown-item(href='/matches/new-match') Dodaj tekmo
             li
                 a.nav-item(href='/presence-report') Porocilo prisotnosti
             li
                 a.nav-item(href='/scouting') Skavting
             li
                 a.nav-item(href='/payroll') Placilna lista
+            hr.navbarhr
             li
                 a.nav-item(href='/users') Uporabniki
             li
-                a.nav-item(href='/settings') Nastavitve
+                a.nav-item.dropdown-toggle#navbarDropdown( role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false') Nastavitve
+                .dropdown-menu(aria-labelledby='navbarDropdown')
+                    a.dropdown-item(href='#') &nbsp&nbsp&nbspPrestavi igralce
+                    a.dropdown-item(href='/settings/locations') &nbsp&nbsp&nbspLokacije treningov
+            li
+                a.nav-item(href='/users/logout') Odjava
             if user.role == 1
+            hr.navbarhr
             li
                 a.nav-item.dropdown-toggle#navbarDropdown( role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false') Admin
                 .dropdown-menu(aria-labelledby='navbarDropdown')
                     a.dropdown-item(href='/admin') Gesla
                     a.dropdown-item(href='/admin/pin-requests') Pripete objave
+                    a.dropdown-item(href='/admin/travel-expenses') Potni stroski
+
