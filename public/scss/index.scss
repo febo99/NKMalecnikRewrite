@@ -38,6 +38,7 @@ a,input{
     flex-direction: column;
 }
 
+
 .container{
     width:150%;
 }
@@ -92,10 +93,11 @@ a,input{
     color:white;
     margin:0;
     border:none;
-=======
+
 textarea{
     display: block;
 }
+
 
 .newPlayerForm{
     width:150%;
@@ -104,4 +106,5 @@ textarea{
 .formButton{
     width:100%;
 }
+
 @import '_mediaQueries.scss';

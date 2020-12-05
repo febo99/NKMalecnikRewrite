@@ -3,20 +3,65 @@ html
         include ../templates/header
         title NK Malecnik
     body
-        h1 Users
-        form(action='/teams/addTeam', method='post')
-            input(type='text' name='name' id='name' value='test') 
-            input(type='text' name='note' id='note' value='test')
-            select(name='coach' id='coach')
-                each user in users
-                    option(value= user.ID)= user.name
-            select(name='assistant' id='assistant')
-                each user in users
-                    option(value= user.ID)= user.name
-            select(name='technical' id='technical')
-                each user in users
-                    option(value= user.ID)= user.name
-            input(type='submit' value='Dodaj') 
-        if error
-            each e in error
-                h4= e
+        include ../templates/logoBar
+        .wrapper
+            include ../templates/navbar
+            .contentWrapper
+<<<<<<< Updated upstream
+                .container
+                    form(action='/teams/addTeam', method='post')
+                        .form-group
+                            label(for='name') Ime:
+                            input(type='text' class='form-control' placeholder='Vnesite ime ekipe.' name='name' id='name')
+                        .form-group
+                            label(for='note') Note:
+                            input(type='text' class='form-control' placeholder='Vnesi note.' name='note' id='note')
+                        .form-group
+                            label(for='coach') Trener:
+                            select(name='coach' class='form-control' id='coach')
+                                each user in users
+                                    option(value= user.ID)= user.name
+                        .form-group
+                            label(for='assistant') Pomočnik:
+                            select(name='assistant' class='form-control' id='assistant')
+                                each user in users
+                                    option(value= user.ID)= user.name
+                        .form-group
+                            label(for='technical') Technical:
+                            select(name='technical' class='form-control' id='technical')
+                                each user in users
+                                    option(value= user.ID)= user.name
+                        br
+                        .form-group
+                            input(type='submit' class='btn btn-primary full-width' value='Dodaj ekipo') 
+                if error
+                    each e in error
+                        h4= e
+=======
+                .container.newTeamForm
+                    h1 Nova ekipa
+                    form(action='/teams/addTeam', method='post')
+                        div(class='form-group')
+                            label(for='name') Ime ekipe:
+                            input(class='form-control' type='text' name='name' id='name' placeholder='Vnesi ime ekipe.') 
+                        div(class='form-group')
+                            label(for='coach') Trener:
+                            select(class='form-control' name='coach' id='coach')
+                                each user in users
+                                    option(value= user.ID)= user.name
+                        div(class='form-group')
+                            label(for='assistant') Pomočnik 1:
+                            select(class='form-control' name='assistant' id='assistant')
+                                each user in users
+                                    option(value= user.ID)= user.name
+                        div(class='form-group')
+                            label(for='technical') Pomočnik 2:
+                            select(class='form-control' name='technical' id='technical')
+                                each user in users
+                                    option(value= user.ID)= user.name
+                        div(class='form-group')
+                            input(class='btn btn-primary formButton' type='submit' value='Dodaj') 
+                    if error
+                        each e in error
+                            h4= e
+>>>>>>> Stashed changes
