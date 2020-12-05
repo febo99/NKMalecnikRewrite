@@ -7,35 +7,80 @@ html
     .wrapper
         include ../templates/navbar
         .contentWrapper
-            h1 Users
-            form(action='/players/addPlayer', method='post')
-                input(type='text' name='name' id='name' value='test')
-                input(type='text' name='surname' id='surname' value='test')
-                input(type='date' name='dateOfBirth' id='dateOfBirth')
-                input(type='checkbox' name='nationality' id='nationality')
-                input(type='text' name='address' id='address' value='test 39')
-                input(type='number' name='postNumber' id='postNumber' value=2229)
-                input(type='text' name='postName' id='postName' value='malecnik')
-                input(type='text' name='playerPhone' id='playerPhone' value='123123123')
-                input(type='text' name='playerEmail' id='playerEmail' value='test@')
-                input(type='text' name='note' id='note' value='testddd')
-                input(type='number' name='emso' id='emso' value='1231231231233')
-                input(type='number' name='registerNumber' id='registerNumber' value='123123')
-                select(name='team' id='team')
-                    each team in teams
-                        option(value= team.ID)= team.name
-                select(name='gkTeam' id='gkTeam')
-                    option(value=0 selected)= `Ni vratar`
-                    each gkTeam in gkTeams
-                        option(value= gkTeam.ID)= gkTeam.name
-                input(type='text' name='dadName' id='parentInfo' value='ata')
-                input(type='text' name='dadPhone' id='parentInfo' value='123123123')
-                input(type='text' name='dadEmail' id='parentInfo' value='ata@')
-                input(type='text' name='mumName' id='parentInfo' value='mama')
-                input(type='text' name='mumPhone' id='parentInfo' value='123123123')
-                input(type='text' name='mumEmail' id='parentInfo' value='mama@')
-                input(type='text' name='phone' id='phone' value='test')
-                input(type='submit' value='Dodaj') 
-            if error
-                each e in error
-                    h4= e
+            .container.newPlayerForm
+                h1 Nov igralec
+                br
+                h4 Podatki o igralcu
+                form(action='/players/addPlayer', method='post')
+                    div(class='form-group')
+                        label(for='name') Ime:
+                        input(class='form-control' type='text' name='name' id='name' placeholder="Vnesi ime.")
+                    div(class='form-group')
+                        label(for='surname') Priimek:
+                        input(class='form-control' type='text' name='surname' id='surname' placeholder="Vnesi priimek.")
+                    div(class='form-group')
+                        label(for='dateOfBirth') Datum rojstva:
+                        input(class='form-control' type='date' name='dateOfBirth' id='dateOfBirth')
+                    div(class='form-group')
+                        label(for='nationality') Državljanstvo:
+                        input(class='form-control' type='checkbox' name='nationality' id='nationality')
+                    div(class='form-group')
+                        label(for='address') Naslov:
+                        input(class='form-control' type='text' name='address' id='address' placeholder="Vnesi naslov.")
+                    div(class='form-group')
+                        label(for='postNumber') Poštna številka:
+                        input(class='form-control' type='number' name='postNumber' id='postNumber' placeholder="Vnesi poštno št.")
+                    div(class='form-group')
+                        label(for='postName') Ime pošte:
+                        input(class='form-control' type='text' name='postName' id='postName' placeholder='Vnesi ime pošte.')
+                    div(class='form-group')
+                        label(for='playerPhone') Tel. št. igralca:
+                        input(class='form-control' type='text' name='playerPhone' id='playerPhone' placeholder='Vnesi tel. št. igralca.')
+                    div(class='form-group')
+                        label(for='playerEmail') E-naslov igralca:
+                        input(class='form-control' type='text' name='playerEmail' id='playerEmail' placeholder='Vnesi e-naslov igralca.')
+                    div(class='form-group')
+                        label(for='emso') EMŠO:
+                        input(class='form-control' type='number' name='emso' id='emso' placeholder='Vnesi EMŠO igralca.')
+                    div(class='form-group')
+                        label(for='registerNumber') Register number:
+                        input(class='form-control' type='number' name='registerNumber' id='registerNumber' placeholder='Vnesi register number.')
+                    div(class='form-group')
+                        label(for='team') Ekipa:
+                        select(class='form-control' name='team' id='team')
+                            each team in teams
+                                option(value= team.ID)= team.name
+                    div(class='form-group')
+                        label(for='gkTeam') Vratar:
+                        select(class='form-control' name='gkTeam' id='gkTeam')
+                            option(value=0 selected)= `Ni vratar`
+                            each gkTeam in gkTeams
+                                option(value= gkTeam.ID)= gkTeam.name
+                    div(class='form-group')
+                        label(for='note') Opomba:
+                        textarea(class='form-control' type='text' rows='4' name='note' id='note' placeholder='Vnesi opombo.')
+                    br
+                    h4 Podatki staršev
+                    div(class='form-group')
+                        label(for='dadName') Ime očeta:
+                        input(class='form-control' type='text' name='dadName' id='parentInfo' placeholder='Vnesi ime in priimek očeta.')
+                    div(class='form-group')
+                        label(for='dadPhone') Tel. št. očeta:
+                        input(class='form-control' type='text' name='dadPhone' id='parentInfo' placeholder='Vnesi tel. št. očeta.')
+                    div(class='form-group')
+                        label(for='dadEmail') E-naslov očeta
+                        input(class='form-control' type='text' name='dadEmail' id='parentInfo' placeholder='Vnesi e-naslov očeta.')
+                    div(class='form-group')
+                        label(for='mumName') Ime matere:                        
+                        input(class='form-control' type='text' name='mumName' id='parentInfo' placeholder='Vnesi ime matere.')
+                    div(class='form-group')
+                        label(for='mumPhone') Tel. št. matere:
+                        input(class='form-control' type='text' name='mumPhone' id='parentInfo' placeholder='Vnesi tel. št. matere.')
+                    div(class='form-group')
+                        label(for='mumEmail') E-naslov matere:
+                        input(class='form-control' type='text' name='mumEmail' id='parentInfo' placeholder='Vnesi e-naslov matere.')
+                    div(class='form-group')
+                        input(type='submit' class='btn btn-primary formButton' value='Dodaj igralca') 
+                if error
+                    each e in error
+                        h4= e

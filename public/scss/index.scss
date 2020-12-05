@@ -38,15 +38,74 @@ a,input{
     flex-direction: column;
 }
 
-textarea{
-    display: block;
-}
 
-.newTrainingForm{
+.container{
     width:150%;
 }
 
 .formButton{
     width:100%;
 }
+
+.dropdown-item{
+    font-style: none;
+    font-size:0.9em;
+    background-color:$base-color;
+}
+
+.dropdown-item:hover{
+    color:white;
+}
+
+.dropdown-menu{
+    background-color: $base-color;
+    border-radius:0px;
+    margin:0 0 0 0;
+    padding:0 0 0 0;
+    border: none;
+}
+
+.logoBar{
+   background-color:#303f9f;
+}
+
+.dropdown-menu{
+    padding:0;
+    margin:0;
+    border:0;
+}
+
+.dropdown-item{
+    font-size:85%;
+    font-weight:normal;
+}
+
+.customNav{
+    margin-right:0.5%;
+    width:15%;
+    background-color:$base-color;
+    height:100%
+}
+
+.navbarhr{
+    width:75%;
+    height:1px;
+    color:white;
+    margin:0;
+    border:none;
+
+textarea{
+    display: block;
+}
+
+.newTrainingForm{
+
+.newPlayerForm{
+    width:150%;
+}
+
+.formButton{
+    width:100%;
+}
+
 @import '_mediaQueries.scss';
